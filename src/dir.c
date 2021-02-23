@@ -40,14 +40,14 @@ int dir(int lgt, char** lst, int out, bool detached) {
       }
    }
 
-
    if (detached) {
       pid_t pid = fork();
       if (pid == 0) {
          // Child
          setShellENV("PARENT", getenv("SHELL"));
 
-         ls(path);
+         
+         out == 0 ? ls(path): lsRedirected(path, outFile, out); 
          exit(0);
       } else if (pid == -1) {
          printf("Error. Fork error occured\n");
@@ -55,7 +55,8 @@ int dir(int lgt, char** lst, int out, bool detached) {
       }
       // Parent, does nothing, operation pushed to background
    } else {
-      ls(path);
+      // Normal non detached execution
+      out == 0 ? ls(path): lsRedirected(path, outFile, out);
    }
    return 0;
 }
@@ -71,8 +72,34 @@ void ls(char* path) {
          printf("%s\n", dir->d_name);
       }
 
-      closedir(dPtr);
    } else {
       printf("Error. cound not open directory %s\n", path);
    }
+   closedir(dPtr);
+}
+
+void lsRedirected(char* path, char* outFile, int out) {
+   char op[4];
+   strcpy(op, (out == 1 ? "w": "a"));
+   FILE* fPtr = fopen(outFile, op);
+   
+   if (fPtr != NULL) {
+      // Based on source material from:
+      // https://www.geeksforgeeks.org/c-program-list-files-sub-directories-directory/
+   
+      DIR *dPtr = opendir(path);
+      struct dirent *dir;
+      if (dPtr) {
+         while ((dir = readdir(dPtr)) != NULL) {
+            fprintf(fPtr, "%s\n", dir->d_name);
+         }
+
+      } else {
+         printf("Error. cound not open directory %s\n", path);
+      }
+      closedir(dPtr);
+   } else {
+      printf("Error. Error occured accessing %s\n", outFile);
+   }
+   fclose(fPtr);
 }
