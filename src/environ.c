@@ -17,15 +17,16 @@ void listENV(char** envs, char* outFile, int out, bool detached) {
       if (pid == 0) {
          // Child
          setShellENV("PARENT", getenv("SHELL"));
-         
+         extern char** environ;//Reloads new environment variables so as to catch the new `PARENT` variable
+
          if (out == 0) {
             // Run no redirection
-            for (int i=0; envs[i]; ++i) {
-               printf("%s\n", envs[i]);
+            for (int i=0; environ[i]; ++i) {
+               printf("%s\n", environ[i]);
             }
          } else {
             // Run redirection
-            listENVRedirect(envs, outFile, out);
+            listENVRedirect(environ, outFile, out);
          }
          exit(0);
       } else if ( pid == -1) {
