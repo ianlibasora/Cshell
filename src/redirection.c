@@ -55,7 +55,7 @@ int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool de
             printf("Error. Incorrect arguments for redirection\n");
             return 1;
          } else {
-            strcpy(inFile, lst[i + 1]);
+            strcpy(outFile, lst[i + 1]);
          }
          out = true;
       }

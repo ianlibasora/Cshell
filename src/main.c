@@ -23,12 +23,14 @@ int main(int argc, char* argv[]) {
    extern char** environ;// Environment variables
    setExePath();//Assign the absolute path to the shell executable
 
+   // Shell input handling
    char* inp;// Input string pointer
    char* inpArgs[MAXARGS];// Array of strings (array of pointers)
    int inpArgc;// Length of `inpArgs`
    char inFile[MAXPATH];
    char outFile[MAXPATH];
 
+   // Shell redirection/detach handling
    bool detached = false;//Bools to state shell
    bool in = false;
    int out = 0;//0: no redirection, 1: tructation, 2: append
@@ -48,14 +50,12 @@ int main(int argc, char* argv[]) {
       if (!strcmp(inpArgs[inpArgc - 1], "&")) {
          detached = true;
       }
-      if (checkRedirection(inpArgc, inpArgs, inPtr, outPtr) != 0) {
+
+      // If the redirection handling fails, reset and restart the loop
+      if (checkRedirection(inpArgc, inpArgs, inPtr, outPtr) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
          detached = in = out = 0;
          clearArgs(inpArgc, inpArgs);
-         continue;
-      }
-      if (getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
-         detached = in = out = 0;
-         clearArgs(inpArgc, inpArgs);
+         cleanRedirectFiles(inFile, outFile);
          continue;
       } 
 
