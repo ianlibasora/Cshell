@@ -22,7 +22,7 @@ int dir(int lgt, char** lst, int out, bool detached) {
       strcpy(path, lst[1]);
    }
 
-   // Determine redirection operation
+   // Determine redirection file
    char outFile[MAXPATH];
    if (out != 0) {
       // Check enough args
@@ -46,7 +46,7 @@ int dir(int lgt, char** lst, int out, bool detached) {
          // Child
          setShellENV("PARENT", getenv("SHELL"));
 
-         
+         // Run either stdout or redirection
          out == 0 ? ls(path): lsRedirected(path, outFile, out); 
          exit(0);
       } else if (pid == -1) {
@@ -56,6 +56,7 @@ int dir(int lgt, char** lst, int out, bool detached) {
       // Parent, does nothing, operation pushed to background
    } else {
       // Normal non detached execution
+      // Run either stdout or redirection
       out == 0 ? ls(path): lsRedirected(path, outFile, out);
    }
    return 0;
