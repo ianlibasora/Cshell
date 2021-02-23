@@ -8,6 +8,7 @@
 #include "functions.h"//Shell operation functions
 #include "commands.h"//Shell commands
 #include "enviroments.h"//Enviroment variable manipulation functions
+#include "redirects.h"//Shell redirection functions
 
 #define MAXARGS 100
 #define MAXPATH 200
