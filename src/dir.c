@@ -9,10 +9,12 @@
 #include "commands.h"
 #include "enviroments.h"
 
+#define MAXPATH 200
+
 // dir command, list contents of directory
 
 int dir(int lgt, char** lst, int out, bool detached) {
-   char path[200];
+   char path[MAXPATH];
    if (lgt == 1 || (lgt == 2 && detached)) {
       strcpy(path, ".");
    } else {
