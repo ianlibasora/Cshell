@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 
@@ -10,15 +11,21 @@
 
 // environ command, display all environment variables
 
-void listENV(int lgt, char** lst, char** envs, bool detached) {
+void listENV(char** envs, char* outFile, int out, bool detached) {
    if (detached) {
       pid_t pid = fork();
       if (pid == 0) {
          // Child
          setShellENV("PARENT", getenv("SHELL"));
          
-         for (int i=0; envs[i]; ++i) {
-            printf("%s\n", envs[i]);
+         if (out == 0) {
+            // Run no redirection
+            for (int i=0; envs[i]; ++i) {
+               printf("%s\n", envs[i]);
+            }
+         } else {
+            // Run redirection
+            listENVRedirect(envs, outFile, out);
          }
          exit(0);
       } else if ( pid == -1) {
@@ -28,8 +35,29 @@ void listENV(int lgt, char** lst, char** envs, bool detached) {
       // Parent does nothing
    } else {
       // Normal non detached operation
-      for (int i=0; envs[i]; ++i) {
-         printf("%s\n", envs[i]);
+      if (out == 0) {
+         // Run no redirection
+         for (int i=0; envs[i]; ++i) {
+            printf("%s\n", envs[i]);
+         }
+      } else {
+         // Run redirection
+         listENVRedirect(envs, outFile, out);
       }
    }  
+}
+
+void listENVRedirect(char** envs, char* outFile, int out) {
+   char op[4];
+   strcpy(op, (out == 1 ? "w": "a"));
+
+   FILE* fPtr = fopen(outFile, op);
+   if (fPtr != NULL) {
+      for (int i=0; envs[i]; ++i) {
+         fprintf(fPtr, "%s\n", envs[i]);
+      }
+   } else {
+      printf("Error. Error occured accessing %s\n", outFile);
+   }
+   fclose(fPtr);
 }

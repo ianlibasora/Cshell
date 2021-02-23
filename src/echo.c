@@ -55,7 +55,6 @@ void echoRedirect(int lgt, char** lst, char* outFile, int out) {
 
    FILE* fPtr = fopen(outFile, op);
    if (fPtr != NULL) {
-      
       int i = 1;
       while (strcmp(lst[i], ">") && strcmp(lst[i], ">>") && i < lgt) {
          fprintf(fPtr, "%s ", lst[i]);

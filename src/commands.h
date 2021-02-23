@@ -12,7 +12,8 @@ void echo(int lgt, char** inp, char* outFile, int out, bool detached);
 void echoRedirect(int lgt, char** lst, char* outFile, int out);
 
 // environ
-void listENV(int lgt, char** lst, char** envs, bool detached);
+void listENV(char** envs, char* outFile, int out, bool detached);
+void listENVRedirect(char** envs, char* outFile, int out);
 
 // dir
 int dir(int lgt, char** lst, char* outFile, int out, bool detached);
