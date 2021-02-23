@@ -13,31 +13,15 @@
 
 // dir command, list contents of directory
 
-int dir(int lgt, char** lst, int out, bool detached) {
+int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
    // Determine paths to directories
    char path[MAXPATH];
-   if (lgt == 1 || (lgt == 2 && detached)) {
+   if (lgt == 1) {
+      strcpy(path, ".");
+   } else if (!strcmp(lst[1], "&") || !strcmp(lst[1], "<") || !strcmp(lst[1], ">") || !strcmp(lst[1], ">>")) {
       strcpy(path, ".");
    } else {
       strcpy(path, lst[1]);
-   }
-
-   // Determine redirection file
-   char outFile[MAXPATH];
-   if (out != 0) {
-      // Check enough args
-      if (detached && lgt == 4) {
-         strcpy(outFile, lst[2]);
-      } else if (detached && lgt == 5) {
-         strcpy(outFile, lst[3]);
-      } else if (detached == false && lgt == 3) {
-         strcpy(outFile, lst[2]);
-      } else if (detached == false && lgt == 4) {
-         strcpy(outFile, lst[3]);
-      } else {
-         printf("Error. Incorrect arguments for redirection\n");
-         return 1;
-      }
    }
 
    if (detached) {

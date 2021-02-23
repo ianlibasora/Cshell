@@ -14,7 +14,7 @@ void echo(int lgt, char** inp, bool detached);
 void listENV(int lgt, char** lst, char** envs, bool detached);
 
 // dir
-int dir(int lgt, char** lst, int out, bool detached);
+int dir(int lgt, char** lst, char* outFile, int out, bool detached);
 void ls(char* path);
 void lsRedirected(char* path, char* outFile, int out);
 

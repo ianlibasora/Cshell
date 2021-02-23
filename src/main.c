@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(inpArgs[0], "clr")) {
          system("clear");
       } else if (!strcmp(inpArgs[0], "dir")) {
-         dir(inpArgc, inpArgs, out, detached);
+         dir(inpArgc, inpArgs, outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "echo")) {
          echo(inpArgc, inpArgs, detached);
       } else if (!strcmp(inpArgs[0], "environ")) {
