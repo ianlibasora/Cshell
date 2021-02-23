@@ -8,7 +8,8 @@ int cd(int lgt, char** inp, bool detached);
 void changeDir(char* path);
 
 // echo
-void echo(int lgt, char** inp, bool detached);
+void echo(int lgt, char** inp, char* outFile, int out, bool detached);
+void echoRedirect(int lgt, char** lst, char* outFile, int out);
 
 // environ
 void listENV(int lgt, char** lst, char** envs, bool detached);
