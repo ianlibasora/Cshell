@@ -10,6 +10,7 @@
 #include "enviroments.h"//Enviroment variable manipulation functions
 
 #define MAXARGS 100
+#define MAXPATH 200
 
 int main(int argc, char* argv[]) {
    if (argc == 2) {
@@ -24,6 +25,11 @@ int main(int argc, char* argv[]) {
    char* inp;// Input string pointer
    char* inpArgs[MAXARGS];// Array of strings (array of pointers)
    int inpArgc;// Length of `inpArgs`
+   char inFile[MAXPATH];
+   char outFile[MAXPATH];
+   // char* inFilePtr = &inFile;
+   // char* outFilePtr = &outFile;
+
    bool detached = false;//Bools to state shell
    bool in = false;
    int out = 0;//0: no redirection, 1: tructation, 2: append
@@ -48,6 +54,7 @@ int main(int argc, char* argv[]) {
          clearArgs(inpArgc, inpArgs);
          continue;
       }
+      getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached);
 
       if (!strcmp(inpArgs[0], "quit")) {
          run = false;
