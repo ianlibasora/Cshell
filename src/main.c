@@ -53,7 +53,11 @@ int main(int argc, char* argv[]) {
          clearArgs(inpArgc, inpArgs);
          continue;
       }
-      getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached);
+      if (getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
+         detached = in = out = 0;
+         clearArgs(inpArgc, inpArgs);
+         continue;
+      } 
 
       if (!strcmp(inpArgs[0], "quit")) {
          run = false;

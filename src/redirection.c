@@ -32,7 +32,7 @@ int checkRedirection(int lgt, char** lst, bool* in, int* out) {
    return 0;
 }
 
-void getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool detached) {
+int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool detached) {
    // Get the filenames for stdin/stdout redirection
    bool in, out;
    in = out = false;
@@ -40,46 +40,27 @@ void getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool d
    for (int i=0; i < lgt; ++i) {
       if (!in && !strcmp(lst[i], "<")) {
          // If < detected
-         if (detached) {
-            // Check for correct args (detached)
-            if (!strcmp(lst[i + 1], "&")) {
-               printf("Error. Incorrect arguments for redirection\n");
-               break;
-            } else {
-               strcpy(inFile, lst[i + 1]);
-            }
+         // Check for correct arg
+         if (i + 1 >= lgt || !strcmp(lst[i + 1], "&") || !strcmp(lst[i + 1], "<") || !strcmp(lst[i + 1], ">") || !strcmp(lst[i + 1], ">>")) {
+            printf("Error. Incorrect arguments for redirection\n");
+            return 1;
          } else {
-            // Check for correct args (normal)
-            if (i + 1 >= lgt) {
-               printf("Error. Incorrect arguments for redirection\n");
-               break;
-            } else {
-               strcpy(inFile, lst[i + 1]);
-            }
+            strcpy(inFile, lst[i + 1]);
          }
          in = true;
       } else if (!out && (!strcmp(lst[i], ">") || !strcmp(lst[i], ">>"))) {
          // if > or >> detected
-         if (detached) {
-            // Check for correct args (detached)
-            if (!strcmp(lst[i + 1], "&")) {
-               printf("Error. Incorrect arguments for redirection\n");
-               break;
-            } else {
-               strcpy(outFile, lst[i + 1]);
-            }
+         // Check for correct args
+         if (i + 1 >= lgt || !strcmp(lst[i + 1], "&") || !strcmp(lst[i + 1], "<") || !strcmp(lst[i + 1], ">") || !strcmp(lst[i + 1], ">>")) {
+            printf("Error. Incorrect arguments for redirection\n");
+            return 1;
          } else {
-            // Check for correct args (normal)
-            if (i + 1 >= lgt) {
-               printf("Error. Incorrect arguments for redirection\n");
-               break;
-            } else {
-               strcpy(outFile, lst[i + 1]);
-            }
+            strcpy(inFile, lst[i + 1]);
          }
          out = true;
       }
    }
+   return 0;
 }
 
 void cleanRedirectFiles(char* inFile, char* outFile) {
