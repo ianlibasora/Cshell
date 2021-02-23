@@ -22,7 +22,7 @@ void listENV(int lgt, char** lst, char** envs, bool detached) {
          }
          exit(0);
       } else if ( pid == -1) {
-         printf("Warning. Fork error occured\n");
+         printf("Error. Fork error occured\n");
          exit(1);
       }
       // Parent does nothing
