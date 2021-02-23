@@ -28,8 +28,6 @@ int main(int argc, char* argv[]) {
    int inpArgc;// Length of `inpArgs`
    char inFile[MAXPATH];
    char outFile[MAXPATH];
-   // char* inFilePtr = &inFile;
-   // char* outFilePtr = &outFile;
 
    bool detached = false;//Bools to state shell
    bool in = false;
@@ -77,6 +75,7 @@ int main(int argc, char* argv[]) {
 
       detached = in = out = 0;
       clearArgs(inpArgc, inpArgs);
+      cleanRedirectFiles(inFile, outFile);
    }
 
    printf("Quitting myshell\n");

@@ -82,3 +82,8 @@ void getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool d
    }
 }
 
+void cleanRedirectFiles(char* inFile, char* outFile) {
+   // Clean redirection files
+   strcpy(inFile, "");
+   strcpy(outFile, "");
+}
