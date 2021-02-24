@@ -1,4 +1,13 @@
 
+/*----------------------------------
+***REMOVED***
+
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+-----------------------------------*/
+
 #include <stdbool.h>
 
 // Headerfile for functions handling shell operation (main.c)

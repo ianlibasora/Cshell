@@ -1,4 +1,13 @@
 
+/*----------------------------------
+***REMOVED***
+
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+-----------------------------------*/
+
 #include <stdbool.h>
 
 // Headerfile for shell redirection functions
