@@ -13,7 +13,7 @@
 
 // dir command, list contents of directory
 
-int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
+void dir(int lgt, char** lst, char* outFile, int out, bool detached) {
    // Determine paths to directories
    char path[MAXPATH];
    if (lgt == 1) {
@@ -43,7 +43,6 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
       // Run either stdout or redirection
       out == 0 ? ls(path): lsRedirected(path, outFile, out);
    }
-   return 0;
 }
 
 void ls(char* path) {

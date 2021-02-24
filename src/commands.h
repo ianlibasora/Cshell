@@ -16,7 +16,7 @@ void listENV(char** envs, char* outFile, int out, bool detached);
 void listENVRedirect(char** envs, char* outFile, int out);
 
 // dir
-int dir(int lgt, char** lst, char* outFile, int out, bool detached);
+void dir(int lgt, char** lst, char* outFile, int out, bool detached);
 void ls(char* path);
 void lsRedirected(char* path, char* outFile, int out);
 

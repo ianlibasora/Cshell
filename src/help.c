@@ -23,6 +23,7 @@ void help(char* outFile, int out, bool detached) {
          exit(0);         
       } else if (pid == -1) {
          printf("Error. Fork error occured\n");
+         exit(1);
       }
       // Parent does nothing
    } else {
