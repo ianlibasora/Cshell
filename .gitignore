@@ -2,3 +2,4 @@
 bin/myshell
 src/*.o
 bin/*.txt
+*.txt
