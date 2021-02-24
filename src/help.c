@@ -12,21 +12,34 @@
 
 // Help command
 
-// feof
+void help(char* outFile, int out, bool detached) {
+   if (detached) {
+      pid_t pid = fork();
+      if (pid == 0) {
+         // Child
+         setShellENV("PARENT", getenv("SHELL"));
 
-int help(char* outFile, int out, bool detached) {
-   char line[MAXLINE];
-   FILE* manFilePtr = fopen("../manual/readme.md", "r");
-   if (manFilePtr != NULL) {
-      while (!feof(manFilePtr)) {
-         fgets(line, MAXLINE, manFilePtr);
-         printf("%s", line);
-
+         outputHelp();
+         exit(0);         
+      } else if (pid == -1) {
+         printf("Error. Fork error occured\n");
       }
+      // Parent does nothing
+   } else {
+      outputHelp();
+   }
+}
 
+void outputHelp() {
+   char line[MAXLINE];
+   FILE* fPtr = fopen("../manual/readme.md", "r");
+   if (fPtr != NULL) {
+      while (!feof(fPtr)) {
+         fgets(line, MAXLINE, fPtr);
+         printf("%s", line);
+      }
    } else {
       printf("Error. Error accessing ../manual/readme.md\n");
    }
-   
-   fclose(manFilePtr);
+   fclose(fPtr);
 }
