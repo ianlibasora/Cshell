@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 
@@ -12,6 +13,8 @@
 
 // Help command
 
+// ----- NEED TO ADD MORE FILTER ------
+
 void help(char* outFile, int out, bool detached) {
    if (detached) {
       pid_t pid = fork();
@@ -19,7 +22,8 @@ void help(char* outFile, int out, bool detached) {
          // Child
          setShellENV("PARENT", getenv("SHELL"));
 
-         outputHelp();
+         // Choose between either normal/redirection operation
+         out == 0 ? outputHelp(): helpRedirect(outFile, out);
          exit(0);         
       } else if (pid == -1) {
          printf("Error. Fork error occured\n");
@@ -27,7 +31,8 @@ void help(char* outFile, int out, bool detached) {
       }
       // Parent does nothing
    } else {
-      outputHelp();
+      // Choose between either normal/redirection operation
+      out == 0 ? outputHelp(): helpRedirect(outFile, out);
    }
 }
 
@@ -43,4 +48,27 @@ void outputHelp() {
       printf("Error. Error accessing ../manual/readme.md\n");
    }
    fclose(fPtr);
+}
+
+void helpRedirect(char* outFile, int out) {
+   char op[4];
+   strcpy(op, (out == 1 ? "w": "a"));
+   char line[MAXLINE];
+
+   FILE* outFilePtr = fopen(outFile, op);
+   if (outFilePtr != NULL) {
+      FILE* manFilePtr = fopen("../manual/readme.md", "r");
+      if (manFilePtr != NULL) {
+         while (!feof(manFilePtr)) {
+            fgets(line, MAXLINE, manFilePtr);
+            fprintf(outFilePtr, "%s", line);
+         }
+      } else {
+         printf("Error. Error accessing ../manual/readme.md\n");
+      }
+      fclose(manFilePtr);
+   } else {
+      printf("Error. Error accessing %s\n", outFile);
+   }
+   fclose(outFilePtr);
 }

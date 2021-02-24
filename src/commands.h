@@ -29,3 +29,4 @@ void pauseShell();
 // Help
 void help(char* outFile, int out, bool detached);
 void outputHelp();
+void helpRedirect(char* outFile, int out);
