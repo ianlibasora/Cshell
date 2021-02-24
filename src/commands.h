@@ -25,3 +25,6 @@ int fallbackChild(char** lst);
 
 // pause
 void pauseShell();
+
+// Help
+int help(char* outFile, int out, bool detached);

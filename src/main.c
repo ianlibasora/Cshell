@@ -73,6 +73,8 @@ int main(int argc, char* argv[]) {
          listENV(environ, outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "pause")) {
          pauseShell();
+      } else if (!strcmp(inpArgs[0], "help")) {
+         help(outFile, out, detached);
       } else {
          fallbackChild(inpArgs);
       }
