@@ -47,7 +47,7 @@ void echo(int lgt, char** inp, char* outFile, int out, bool detached) {
       // Normal non detached operation
       if (out == 0) {
          // Run no redirection
-         for (int i=1; i < lgt-1; ++i) {
+         for (int i=1; i < lgt; ++i) {
             printf("%s ", inp[i]);
          }
          printf("\n");
