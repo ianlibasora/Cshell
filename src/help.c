@@ -49,9 +49,10 @@ void outputHelp() {
    char line[MAXLINE];
    FILE* fPtr = fopen("../manual/readme.md", "r");
    if (fPtr != NULL) {
+      fgets(line, MAXLINE, fPtr);
       while (!feof(fPtr)) {
-         fgets(line, MAXLINE, fPtr);
          printf("%s", line);
+         fgets(line, MAXLINE, fPtr);
       }
    } else {
       printf("Error. Error accessing ../manual/readme.md\n");
@@ -68,9 +69,10 @@ void helpRedirect(char* outFile, int out) {
    if (outFilePtr != NULL) {
       FILE* manFilePtr = fopen("../manual/readme.md", "r");
       if (manFilePtr != NULL) {
+         fgets(line, MAXLINE, manFilePtr);
          while (!feof(manFilePtr)) {
-            fgets(line, MAXLINE, manFilePtr);
             fprintf(outFilePtr, "%s", line);
+            fgets(line, MAXLINE, manFilePtr);
          }
       } else {
          printf("Error. Error accessing ../manual/readme.md\n");
