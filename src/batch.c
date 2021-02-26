@@ -17,6 +17,7 @@
 #include "functions.h"
 #include "commands.h"
 #include "enviroments.h"
+#include "redirects.h"
 
 #define MAXARGS 100
 #define MAXPATH 200
@@ -46,16 +47,42 @@ int batchRunner(char* fName) {
    if (fPtr != NULL) {
       fgets(inp, MAXLINE, fPtr);
       while (!feof(fPtr)) {
-         printf("%s", inp);
+         inpArgc = splitString(inp, inpArgs, MAXARGS);
+         if (!strcmp(inpArgs[inpArgc - 1], "&")) {
+            detached = true;
+         }
+
+         // If the redirection handling fails, reset and restart the loop
+         if (checkRedirection(inpArgc, inpArgs, inPtr, outPtr) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
+            detached = in = out = 0;
+            clearArgs(inpArgc, inpArgs);
+            cleanRedirectFiles(inFile, outFile);
+            continue;
+         } 
+
+         if (!strcmp(inpArgs[0], "cd")) {
+            cd(inpArgc, inpArgs, detached);
+         } else if (!strcmp(inpArgs[0], "clr")) {
+            system("clear");
+         } else if (!strcmp(inpArgs[0], "dir")) {
+            dir(inpArgc, inpArgs, outFile, out, detached);
+         } else if (!strcmp(inpArgs[0], "echo")) {
+            echo(inpArgc, inpArgs, outFile, out, detached);
+         } else if (!strcmp(inpArgs[0], "environ")) {
+            listENV(environ, outFile, out, detached);
+         } else if (!strcmp(inpArgs[0], "pause")) {
+            pauseShell();
+         } else if (!strcmp(inpArgs[0], "help")) {
+            help(outFile, out, detached);
+         } else {
+            fallbackChild(inpArgs);
+         }
+
+         detached = in = out = 0;
+         clearArgs(inpArgc, inpArgs);
+         cleanRedirectFiles(inFile, outFile);
          fgets(inp, MAXLINE, fPtr);
       }
-
-
-
-
-
-
-
 
    } else {
       printf("Error. Error accessing %s\n", fName);
