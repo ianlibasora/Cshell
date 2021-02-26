@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
    if (argc == 2) {
       // If argv supplied, run in batch mode
       batchRunner(argv[1]);
-      return 0;
+      exit(0);
    }
 
    extern char** environ;// Environment variables
@@ -94,5 +94,5 @@ int main(int argc, char* argv[]) {
    }
 
    printf("Quitting myshell\n");
-   return 0;
+   exit(0);
 }
