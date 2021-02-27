@@ -37,5 +37,5 @@ void pauseShell();
 
 // Help
 void help(char* outFile, int out, bool detached);
-void outputHelp();
+int promptHelp();
 void helpRedirect(char* outFile, int out);
