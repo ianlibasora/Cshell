@@ -14,7 +14,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/ioctl.h>
 
 #include "commands.h"
 #include "enviroments.h"
@@ -88,11 +87,4 @@ void helpRedirect(char* outFile, int out) {
       printf("Error. Error accessing %s\n", outFile);
    }
    fclose(outFilePtr);
-}
-
-void getTermSize(short unsigned int* row, short unsigned int* col) {
-   struct winsize termSize;
-   ioctl(0, TIOCGWINSZ, &termSize);
-   *col = termSize.ws_col;
-   *row = termSize.ws_row;
 }

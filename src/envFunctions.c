@@ -12,12 +12,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #include "enviroments.h"
 
 #define MAXPATH 200
 
-// Environment variable manipulation functions
+// Environment variable manipulation / system functions
 
 void setShellENV(char* key, char* value) {
    // Generic set key/value pair
@@ -37,4 +38,11 @@ void setExePath() {
    getcwd(path, MAXPATH);
    strcat(path, "/myshell");
    setenv("SHELL", path, 1);
+}
+
+void getTermSize(short unsigned int* row, short unsigned int* col) {
+   struct winsize termSize;
+   ioctl(0, TIOCGWINSZ, &termSize);
+   *col = termSize.ws_col;
+   *row = termSize.ws_row;
 }
