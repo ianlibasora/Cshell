@@ -17,8 +17,9 @@
 
 #include "commands.h"
 #include "enviroments.h"
+#include "functions.h"
 
-#define MAXLINE 200
+#define MAXLINE 500
 
 // Help command
 
@@ -37,7 +38,7 @@ void help(char* outFile, int out, bool detached) {
          setShellENV("PARENT", getenv("SHELL"));
 
          // Choose between either normal/redirection operation
-         out == 0 ? outputHelp(): helpRedirect(outFile, out);
+         out == 0 ? promptHelp(): helpRedirect(outFile, out);
          exit(0);         
       } else if (pid == -1) {
          printf("Error. Fork error occured\n");
@@ -46,23 +47,56 @@ void help(char* outFile, int out, bool detached) {
       // Parent does nothing
    } else {
       // Choose between either normal/redirection operation
-      out == 0 ? outputHelp(): helpRedirect(outFile, out);
+      out == 0 ? promptHelp(): helpRedirect(outFile, out);
    }
 }
 
-void outputHelp() {
+int promptHelp() {
    char line[MAXLINE];
+   int alloc = 100;
+   int lgt = 0;
+   char** lines = calloc(alloc, sizeof(char*));
+   if (lines == NULL) {
+      printf("Error. Memory allocation failed\n");
+      return 2;
+   }
+
+   // Read file contents into array
    FILE* fPtr = fopen("../manual/readme.md", "r");
    if (fPtr != NULL) {
       fgets(line, MAXLINE, fPtr);
       while (!feof(fPtr)) {
-         printf("%s", line);
+         lines[lgt] = calloc(strlen(line), sizeof(char));
+         strcpy(lines[lgt], line);
          fgets(line, MAXLINE, fPtr);
+         ++lgt;
+
+         if (lgt >= alloc) {
+            alloc += 100;
+            lines = realloc(lines, alloc * sizeof(char*));
+            if (lines == NULL) {
+               printf("Error. Memory reallocation failed\n");
+               return 3;
+            }
+         }
       }
    } else {
       printf("Error. Error accessing ../manual/readme.md\n");
+      return 1;
    }
    fclose(fPtr);
+
+   // ------------- INSERT MORE FILTER ---------------
+
+   for (int i=0; i < lgt; ++i) {
+      printf("%s", lines[i]);
+   }
+
+
+   // Clean memory used
+   clearArgs(lgt, lines);
+   free(lines);
+   return 0;
 }
 
 void helpRedirect(char* outFile, int out) {
