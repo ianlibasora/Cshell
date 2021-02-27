@@ -17,5 +17,6 @@
 
 void pauseShell() {
    // Hold until the user presses `enter`
+   printf("Press enter to continue ");
    getchar();
 }
