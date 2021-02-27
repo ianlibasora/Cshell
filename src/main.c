@@ -43,8 +43,6 @@ int main(int argc, char* argv[]) {
    bool detached = false;//Bools to state shell
    bool in = false;
    int out = 0;//0: no redirection, 1: tructation, 2: append
-   bool* inPtr = &in;
-   int* outPtr = &out;
 
    bool run = true;
    while (run) {
@@ -61,7 +59,7 @@ int main(int argc, char* argv[]) {
       }
 
       // If the redirection handling fails, reset and restart the loop
-      if (checkRedirection(inpArgc, inpArgs, inPtr, outPtr) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
+      if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
          detached = in = out = 0;
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);

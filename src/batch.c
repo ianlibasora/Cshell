@@ -40,8 +40,6 @@ int batchRunner(char* fName) {
    bool detached = false;//Bools to state shell
    bool in = false;
    int out = 0;//0: no redirection, 1: tructation, 2: append
-   bool* inPtr = &in;
-   int* outPtr = &out;
 
    FILE* fPtr = fopen(fName, "r");
    if (fPtr != NULL) {
@@ -53,7 +51,7 @@ int batchRunner(char* fName) {
          }
 
          // If the redirection handling fails, reset and restart the loop
-         if (checkRedirection(inpArgc, inpArgs, inPtr, outPtr) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
+         if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
             detached = in = out = 0;
             clearArgs(inpArgc, inpArgs);
             cleanRedirectFiles(inFile, outFile);
