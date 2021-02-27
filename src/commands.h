@@ -36,7 +36,6 @@ int fallbackChild(char** lst);
 void pauseShell();
 
 // Help
-int help(char* outFile, int out, bool detached);
+void help(char* outFile, int out, bool detached);
 void outputHelp();
 void helpRedirect(char* outFile, int out);
-int readHelpFile(int* lgt, char** lines);

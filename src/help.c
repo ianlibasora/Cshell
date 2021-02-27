@@ -17,45 +17,37 @@
 
 #include "commands.h"
 #include "enviroments.h"
-#include "functions.h"
 
-#define MAXLINE 500
+#define MAXLINE 200
 
 // Help command
 
 // ----- NEED TO ADD MORE FILTER ------
 
-int help(char* outFile, int out, bool detached) {
+void help(char* outFile, int out, bool detached) {
    short unsigned int row, col;
-   getTermSize(&row, &col);
-   int lgt = 100;
-   char** lines = calloc(lgt, sizeof(char*));  
-   if (readHelpFile(&lgt, lines) != 0) {
-      return 1;
+   short unsigned int* rowPtr = &row;
+   short unsigned int* colPtr = &col;
+   getTermSize(rowPtr, colPtr);
+   
+   if (detached) {
+      pid_t pid = fork();
+      if (pid == 0) {
+         // Child
+         setShellENV("PARENT", getenv("SHELL"));
+
+         // Choose between either normal/redirection operation
+         out == 0 ? outputHelp(): helpRedirect(outFile, out);
+         exit(0);         
+      } else if (pid == -1) {
+         printf("Error. Fork error occured\n");
+         exit(1);
+      }
+      // Parent does nothing
+   } else {
+      // Choose between either normal/redirection operation
+      out == 0 ? outputHelp(): helpRedirect(outFile, out);
    }
-
-   // if (detached) {
-   //    pid_t pid = fork();
-   //    if (pid == 0) {
-   //       // Child
-   //       setShellENV("PARENT", getenv("SHELL"));
-
-   //       // Choose between either normal/redirection operation
-   //       out == 0 ? outputHelp(): helpRedirect(outFile, out);
-   //       exit(0);         
-   //    } else if (pid == -1) {
-   //       printf("Error. Fork error occured\n");
-   //       exit(1);
-   //    }
-   //    // Parent does nothing
-   // } else {
-   //    // Choose between either normal/redirection operation
-   //    out == 0 ? outputHelp(): helpRedirect(outFile, out);
-   // }
-
-   // Clean used memory
-   clearArgs(lgt, lines);
-   free(lines);
 }
 
 void outputHelp() {
@@ -95,36 +87,4 @@ void helpRedirect(char* outFile, int out) {
       printf("Error. Error accessing %s\n", outFile);
    }
    fclose(outFilePtr);
-}
-
-int readHelpFile(int* lgt, char** lines) {
-   int i = 0;
-   int max = *lgt;//Initial array allocation
-   char tmpLine[MAXLINE];
-   
-   FILE* fPtr = fopen("../manual/readme.md", "r");
-   if (fPtr != NULL) {
-      fgets(tmpLine, MAXLINE, fPtr);
-      while (!feof(fPtr)) {
-         lines[i] = calloc(strlen(tmpLine), sizeof(char));
-         strcpy(lines[i], tmpLine);
-         fgets(tmpLine, MAXLINE, fPtr);
-         ++i;
-
-         // Check if more lines required
-         if (i >= max) {
-            max += 100;
-            lines = realloc(lines, max * sizeof(*lines));
-         }
-      }
-      fclose(fPtr);
-      // Truncate over allocated memory
-      lines = realloc(lines, i * sizeof(*lines));
-   } else {
-      printf("Error. Error accessing ../manual/readme.md\n");
-      fclose(fPtr);
-      return 1;
-   }
-   *lgt = i;//Return array length
-   return 0;
 }
