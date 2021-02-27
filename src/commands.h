@@ -39,4 +39,3 @@ void pauseShell();
 void help(char* outFile, int out, bool detached);
 void outputHelp();
 void helpRedirect(char* outFile, int out);
-void getTermSize(short unsigned int* row, short unsigned int* col);
