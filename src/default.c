@@ -20,8 +20,8 @@
 
 // Default fallback system call function when command is unknown
 
-int fallbackChild(char** lst) {
-
+void fallbackChild(char** lst) {
+   // Fork and execute non internal program detached
    pid_t pid = fork();
    if (pid == 0) {
       // Child
@@ -29,9 +29,9 @@ int fallbackChild(char** lst) {
       execvp(lst[0], lst);
 
       exit(0);
-   } else {
-      // Parent, wait for child to exec
-      wait(NULL);
-      return 0;
+   } else if (pid == -1) {
+      printf("Error. Fork error occured\n");
+      exit(1);
    }
+   // Parent does nothing
 }
