@@ -21,21 +21,21 @@
 
 #define MAXHOST 100
 #define MAXINPUT 500
+#define COLBLUE "\x1B[34m"
+#define COLGREEN "\x1b[32m"
+#define COLRESET "\x1b[0m"
 
 // Functions for main.c shell operation
 
 char* promptInput() {
-   const char colBlue[] = "\x1B[34m";
-   const char colGreen[] = "\x1b[32m";
-   const char colReset[] = "\x1b[0m";
    char host[MAXHOST];
 
    char* uName = getenv("USER");
    gethostname(host, MAXHOST);
    char* cwd = getenv("PWD");//Note: cd will handle if new cwd will be invalid
 
-   printf("%s%s@%s%s:", colGreen, uName, host, colReset);//Print username@hostmachine
-   printf("%s%s%s$ ", colBlue, cwd, colReset);//Print cwd
+   printf("%s%s@%s%s:", COLGREEN, uName, host, COLRESET);//Print username@hostmachine
+   printf("%s%s%s$ ", COLBLUE, cwd, COLRESET);//Print cwd
 
    static char inp[MAXINPUT];
    fgets(inp, MAXINPUT, stdin);
