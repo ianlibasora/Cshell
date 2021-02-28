@@ -26,11 +26,6 @@
 // ----- NEED TO ADD MORE FILTER ------
 
 void help(char* outFile, int out, bool detached) {
-   short unsigned int row, col;
-   short unsigned int* rowPtr = &row;
-   short unsigned int* colPtr = &col;
-   getTermSize(rowPtr, colPtr);
-   
    if (detached) {
       pid_t pid = fork();
       if (pid == 0) {
@@ -67,6 +62,7 @@ int promptHelp() {
       fgets(line, MAXLINE, fPtr);
       while (!feof(fPtr)) {
          lines[lgt] = calloc(strlen(line), sizeof(char));
+         line[strlen(line) - 1] = '\0';//Trim trailling \n
          strcpy(lines[lgt], line);
          fgets(line, MAXLINE, fPtr);
          ++lgt;
@@ -86,12 +82,53 @@ int promptHelp() {
    }
    fclose(fPtr);
 
-   // ------------- INSERT MORE FILTER ---------------
+   // More filter
+   short unsigned int row, col;
+   getTermSize(&row, &col);
+   int bufferEnd = 0;// Count of number of buffer rows used by printing
+   int i = 0;// Index of lines array
+   bool overflow = false;
+   int offset = 0;
 
-   for (int i=0; i < lgt; ++i) {
-      printf("%s", lines[i]);
+   while (i < lgt) {
+      if (overflow || bufferEnd >= row) {
+         // Reached max amount of available rows on the screen
+         bufferEnd = 0;
+         overflow = false;
+
+         // Prompt interferes with output
+         getchar();
+      }
+
+      if (strlen(lines[i]) > col) {
+         offset = calcOffset(strlen(lines[i]), col);
+         if (bufferEnd + offset >= row) {
+            // Account for cases of lines overflow
+            overflow = true;
+         } else {
+            printf("%s", lines[i]);
+            // If not final print before buffering, print \n 
+            // This is to not cause a \n with getchar()
+            if (bufferEnd + offset < row) {
+               printf("\n");
+            }
+            
+            bufferEnd += offset;
+            ++i;
+         }
+      } else if (bufferEnd + 1 == row) {
+         // Case: Final print before buffering will trigger
+         // Dont print new line
+         // This is to not cause a \n with getchar()
+         printf("%s", lines[i]);
+         ++i;
+         ++bufferEnd;
+      } else {
+         printf("%s\n", lines[i]);
+         ++i;
+         ++bufferEnd;
+      }
    }
-
 
    // Clean memory used
    clearArgs(lgt, lines);
@@ -121,4 +158,13 @@ void helpRedirect(char* outFile, int out) {
       printf("Error. Error accessing %s\n", outFile);
    }
    fclose(outFilePtr);
+}
+
+int calcOffset(int lgt, int maxBuffer) {
+   int out = 1;
+   while (lgt > maxBuffer) {
+      lgt -= maxBuffer;
+      ++out;
+   }
+   return out;
 }
