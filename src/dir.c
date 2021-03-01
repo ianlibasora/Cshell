@@ -66,7 +66,7 @@ void ls(char* path) {
       }
 
    } else {
-      printf("Error. cound not open directory %s\n", path);
+      printf("Error. Could not open directory %s\n", path);
    }
    closedir(dPtr);
 }
