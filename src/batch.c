@@ -26,6 +26,9 @@
 // Myshell batch mode runner function
 
 int batchRunner(char* fName) {
+   char cwd[MAXPATH];
+   getcwd(cwd, MAXPATH);
+   setenv("PWD", cwd, 1);//Ensure that cwd is initialised properly
    extern char** environ;// Environment variables
    setExePath();//Assign the absolute path to the shell executable
 
