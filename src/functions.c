@@ -53,7 +53,7 @@ int splitString(char* str, char** lst, int max) {
       strcpy(lst[i], arg);
       ++i;
 
-      arg = strtok(NULL, " \n");
+      arg = strtok(NULL, " \t\n");
    }
    // Set last element NULL
    lst[i] = NULL;
