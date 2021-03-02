@@ -32,6 +32,9 @@ void fallbackChild(char** lst) {
    } else if (pid == -1) {
       printf("Error. Fork error occured\n");
       exit(1);
+   } else {
+      // Parent does nothing, but should wait for execution to finished
+      // Detached execution is offload to main shell
+      wait(NULL);
    }
-   // Parent does nothing
 }
