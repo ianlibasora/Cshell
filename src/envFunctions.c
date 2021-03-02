@@ -27,14 +27,14 @@ void setShellENV(char* key, char* value) {
 
 void setShellPath(char* key) {
    // Set cwd path for a given key
-   char path[MAXPATH];
+   static char path[MAXPATH];
    getcwd(path, MAXPATH);
    setenv(key, path, 1);
 }
 
 void setExePath() {
    // set absolute path to shell executable
-   char path[MAXPATH];
+   static char path[MAXPATH];
    getcwd(path, MAXPATH);
    strcat(path, "/myshell");
    setenv("SHELL", path, 1);
