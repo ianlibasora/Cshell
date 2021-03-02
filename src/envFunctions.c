@@ -16,7 +16,7 @@ Student Name: Joseph Libasora
 
 #include "enviroments.h"
 
-#define MAXPATH 200
+#define MAXPATH 250
 
 // Environment variable manipulation / system functions
 

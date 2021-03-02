@@ -20,7 +20,7 @@ Student Name: Joseph Libasora
 #include "redirects.h"
 
 #define MAXARGS 100
-#define MAXPATH 200
+#define MAXPATH 250
 #define MAXLINE 500
 
 // Myshell batch mode runner function
