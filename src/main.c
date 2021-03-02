@@ -20,7 +20,7 @@
 #include "redirects.h"//Shell redirection functions
 
 #define MAXARGS 100
-#define MAXPATH 200
+#define MAXPATH 250
 
 int main(int argc, char* argv[]) {
    if (argc == 2) {
