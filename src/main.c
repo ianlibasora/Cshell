@@ -31,9 +31,9 @@ int main(int argc, char* argv[]) {
 
    static char cwd[MAXPATH];
    getcwd(cwd, MAXPATH);
-   setenv("PWD", cwd, 1);//Ensure that cwd is initialised properly
-   extern char** environ;// Environment variables
-   setExePath();//Assign the absolute path to the shell executable
+   setenv("PWD", cwd, 1);// Ensure that cwd is initialised properly
+   extern char** environ;// Expose environment variables
+   setExePath();// Assign the absolute path to the shell executable
 
    // Shell input handling
    char* inp;// Input string pointer

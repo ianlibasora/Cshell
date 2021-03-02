@@ -27,9 +27,15 @@ void setShellENV(char* key, char* value) {
 
 void setShellPath(char* key) {
    // Set cwd path for a given key
+
+   // ------------ REFERENCE -------------
+
    static char path[MAXPATH];
-   getcwd(path, MAXPATH);
-   setenv(key, path, 1);
+   size_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
+   if (len != -1) {
+      path[len] = '\0';
+      setenv(key, path, 1);
+   }
 }
 
 void setExePath() {
