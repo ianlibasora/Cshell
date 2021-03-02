@@ -20,6 +20,7 @@
 #include "functions.h"
 
 #define MAXLINE 500
+#define MAXPATH 250
 
 // Help command
 
@@ -57,7 +58,10 @@ int promptHelp() {
    }
 
    // Read file contents into array
-   FILE* fPtr = fopen("../manual/readme.md", "r");
+   char* helpFile = calloc(MAXPATH, sizeof(char));
+   getHelpPath(helpFile);
+
+   FILE* fPtr = fopen(helpFile, "r");
    if (fPtr != NULL) {
       fgets(line, MAXLINE, fPtr);
       while (!feof(fPtr)) {
@@ -77,7 +81,7 @@ int promptHelp() {
          }
       }
    } else {
-      printf("Error. Error accessing ../manual/readme.md\n");
+      printf("Error. Error accessing %s\n", helpFile);
       return 1;
    }
    fclose(fPtr);
@@ -133,6 +137,7 @@ int promptHelp() {
    // Clean memory used
    clearArgs(lgt, lines);
    free(lines);
+   free(helpFile);
    return 0;
 }
 
