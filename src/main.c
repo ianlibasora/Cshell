@@ -14,10 +14,10 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "functions.h"//Shell operation functions
-#include "commands.h"//Shell commands
-#include "enviroments.h"//Enviroment variable manipulation functions
-#include "redirects.h"//Shell redirection functions
+#include "functions.h"// Shell operation functions
+#include "commands.h"// Shell commands
+#include "enviroments.h"// Enviroment variable manipulation functions
+#include "redirects.h"// Shell redirection functions
 
 #define MAXARGS 100
 #define MAXPATH 250
@@ -43,13 +43,13 @@ int main(int argc, char* argv[]) {
    char outFile[MAXPATH];
 
    // Shell redirection/detach handling
-   bool detached = false;//Bools to state shell
+   bool detached = false;//Bools to state shell detachment
    bool in = false;
    int out = 0;// 0: no redirection, 1: stdout tructation, 2: stdout append
 
    bool run = true;
    while (run) {
-      cleanChildren();//Clean any present zombie processes
+      cleanChildren();// Clean any present zombie processes
       inp = promptInput();// Full complete string of user input
       if (strlen(inp) <= 1) {
          // skip and continue loop if empty string
