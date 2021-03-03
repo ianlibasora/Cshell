@@ -57,9 +57,7 @@ int main(int argc, char* argv[]) {
       }
 
       inpArgc = splitString(inp, inpArgs, MAXARGS);
-      if (!strcmp(inpArgs[inpArgc - 1], "&")) {
-         detached = true;
-      }
+      detached = checkDetached(inpArgc, inpArgs);
 
       // If the redirection handling fails, reset and restart the loop
       if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
