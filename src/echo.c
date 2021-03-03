@@ -29,8 +29,10 @@ void echo(int lgt, char** inp, char* outFile, int out, bool detached) {
 
          if (out == 0) {
             // Run no redirection
-            for (int i=1; i < lgt-1; ++i) {
+            int i = 1;
+            while (i < lgt && strcmp(inp[i], "&")) {
                printf("%s ", inp[i]);
+               ++i;
             }
             printf("\n");
          } else {
@@ -65,9 +67,13 @@ void echoRedirect(int lgt, char** lst, char* outFile, int out) {
    FILE* fPtr = fopen(outFile, op);
    if (fPtr != NULL) {
       int i = 1;
-      while (strcmp(lst[i], ">") && strcmp(lst[i], ">>") && i < lgt) {
-         fprintf(fPtr, "%s ", lst[i]);
-         ++i;
+      while (i < lgt && strcmp(lst[i], "&")) {
+         if (!strcmp(lst[i], "<") || !strcmp(lst[i], ">") || !strcmp(lst[i], ">>")) {
+            i += 2;
+         } else {
+            fprintf(fPtr, "%s ", lst[i]);
+            ++i;
+         }
       }
       fprintf(fPtr, "\n");
    } else {
