@@ -30,7 +30,7 @@ void ls(char* path);
 void lsRedirected(char* path, char* outFile, int out);
 
 // fallback execution
-void fallbackChild(char** lst);
+void fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out);
 
 // pause
 void pauseShell();
