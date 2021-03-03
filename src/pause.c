@@ -10,6 +10,7 @@ Student Name: Joseph Libasora
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "commands.h"
 
@@ -17,6 +18,6 @@ Student Name: Joseph Libasora
 
 void pauseShell() {
    // Hold until the user presses `enter`
-   printf("Press enter to continue ");
-   getchar();
+   // Uses the getpass() to stop input echo
+   char* tmp = getpass("Press ENTER to continue ");
 }
