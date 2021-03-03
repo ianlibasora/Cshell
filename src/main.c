@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
    // Shell redirection/detach handling
    bool detached = false;//Bools to state shell
    bool in = false;
-   int out = 0;//0: no redirection, 1: tructation, 2: append
+   int out = 0;// 0: no redirection, 1: stdout tructation, 2: stdout append
 
    bool run = true;
    while (run) {
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(inpArgs[0], "help")) {
          help(outFile, out, detached);
       } else {
-         fallbackChild(inpArgs);
+         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out);
       }
 
       detached = in = out = 0;
