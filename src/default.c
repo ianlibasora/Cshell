@@ -34,18 +34,18 @@ void fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, in
          // If stdin/stdout redirection active
          // Rm redirection related args
          // Can assume that redirection handler has checked for invalid redirection invokation
+         
          char* newCmd[lgt];
-         int i = 0;// lst index
          int j = 0;// newCmd index
-         while (i < lgt) {
+         // i = lst index
+         for (int i=0; i < lgt; ++i) {
             if (!strcmp(lst[i], "<") || !strcmp(lst[i], ">") || !strcmp(lst[i], ">>")) {
-               i += 2;
-            } else {
-               newCmd[j] = calloc(strlen(lst[i]), sizeof(char));
-               strcpy(newCmd[j], lst[i]);
                ++i;
-               ++j;
+               continue;
             }
+            newCmd[j] = calloc(strlen(lst[i]), sizeof(char));
+            strcpy(newCmd[j], lst[i]);
+            ++j;
          }
          // Set last index of newCmd to NULL
          newCmd[j] = NULL;
