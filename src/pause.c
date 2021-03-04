@@ -20,4 +20,5 @@ void pauseShell() {
    // Hold until the user presses `enter`
    // Uses the getpass() to stop input echo
    char* tmp = getpass("Press ENTER to continue ");
+   free(tmp);
 }

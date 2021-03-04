@@ -93,6 +93,7 @@ int promptHelp() {
    int i = 0;// Index of lines array
    bool overflow = false;
    int offset = 0;
+   char* tmp;
 
    while (i < lgt) {
       if (overflow || bufferEnd >= row) {
@@ -101,7 +102,7 @@ int promptHelp() {
          overflow = false;
 
          // Prompt interferes with output
-         getchar();
+         tmp = getpass(" ");
       }
 
       if (strlen(lines[i]) > col) {
@@ -138,6 +139,7 @@ int promptHelp() {
    clearArgs(lgt, lines);
    free(lines);
    free(helpFile);
+   free(tmp);
    return 0;
 }
 
