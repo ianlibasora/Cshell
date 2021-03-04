@@ -13,14 +13,22 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
+#include <setjmp.h>
 
 #include "functions.h"// Shell operation functions
 #include "commands.h"// Shell commands
 #include "enviroments.h"// Enviroment variable manipulation functions
 #include "redirects.h"// Shell redirection functions
+#include "sigFunctions.h"// Signal handling functions
 
 #define MAXARGS 100
 #define MAXPATH 250
+
+
+// ----- ref os book
+sigjmp_buf buf;
+// ------ END BLOCK
 
 int main(int argc, char* argv[]) {
    if (argc == 2) {
@@ -49,6 +57,14 @@ int main(int argc, char* argv[]) {
 
    bool run = true;
    while (run) {
+
+
+      // ----------- REF BLOCK FROM OS
+      if (!sigsetjmp(buf, 1)) {
+         Signal(SIGINT, handler);
+      }
+      // ------- END BLOCK
+
       cleanChildren();// Clean any present zombie processes
       inp = promptInput();// Full complete string of user input
       if (strlen(inp) <= 1) {
