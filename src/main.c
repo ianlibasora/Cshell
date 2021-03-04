@@ -62,6 +62,11 @@ int main(int argc, char* argv[]) {
       // ----------- REF BLOCK FROM OS
       if (!sigsetjmp(buf, 1)) {
          Signal(SIGINT, handler);
+      } else {
+         // If SIGINT triggers, cleanup shell before for new prompt
+         detached = in = out = 0;
+         clearArgs(inpArgc, inpArgs);
+         cleanRedirectFiles(inFile, outFile);
       }
       // ------- END BLOCK
 
