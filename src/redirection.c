@@ -19,19 +19,20 @@
 
 int checkRedirection(int lgt, char** lst, bool* in, int* out) {
    // Check args if redirection is required
+   // Return 0 on sucess
    for (int i=0; i < lgt; ++i) {
       if (!strcmp(lst[i], "<")) {
          *in = true;
       } else if (!strcmp(lst[i], ">")) {
          if (*out != 0) {
-            printf("Error. Mixed use of \">\" and \">>\" redirection\n");
+            fprintf(stderr, "Error. Mixed use of \">\" and \">>\" redirection\n");
             return 1;
          } else {
             *out = 1;
          }
       } else if (!strcmp(lst[i], ">>")) {
          if (*out != 0) {
-            printf("Error. Mixed use of \">\" and \">>\" redirection\n");
+            fprintf(stderr, "Error. Mixed use of \">\" and \">>\" redirection\n");
             return 2;
          } else {
             *out = 2;
@@ -43,6 +44,7 @@ int checkRedirection(int lgt, char** lst, bool* in, int* out) {
 
 int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool detached) {
    // Get the filenames for stdin/stdout redirection
+   // Return 0 on sucess
    bool in, out;
    in = out = false;
    
@@ -51,7 +53,7 @@ int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool de
          // If < detected
          // Check for correct arg
          if (i + 1 >= lgt || !strcmp(lst[i + 1], "&") || !strcmp(lst[i + 1], "<") || !strcmp(lst[i + 1], ">") || !strcmp(lst[i + 1], ">>")) {
-            printf("Error. Incorrect arguments for redirection\n");
+            fprintf(stderr, "Error. Incorrect arguments for redirection\n");
             return 1;
          } else {
             strcpy(inFile, lst[i + 1]);
@@ -61,8 +63,8 @@ int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool de
          // if > or >> detected
          // Check for correct args
          if (i + 1 >= lgt || !strcmp(lst[i + 1], "&") || !strcmp(lst[i + 1], "<") || !strcmp(lst[i + 1], ">") || !strcmp(lst[i + 1], ">>")) {
-            printf("Error. Incorrect arguments for redirection\n");
-            return 1;
+            fprintf(stderr, "Error. Incorrect arguments for redirection\n");
+            return 2;
          } else {
             strcpy(outFile, lst[i + 1]);
          }
