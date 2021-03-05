@@ -61,9 +61,9 @@ int main(int argc, char* argv[]) {
          Signal(SIGINT, handler);
       } else {
          // If SIGINT triggers, cleanup shell before new prompt
-         detached = in = out = 0;
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
+         detached = in = out = inpArgc = 0;
       }
       // ------- END BLOCK
 
@@ -79,9 +79,9 @@ int main(int argc, char* argv[]) {
       // Checks and validates redirection and finds files associated with redirection
       // If the redirection handling fails, reset and restart the loop
       if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
-         detached = in = out = 0;
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
+         detached = in = out = inpArgc = 0;
          continue;
       } 
 
@@ -106,9 +106,9 @@ int main(int argc, char* argv[]) {
       }
 
       // Loop restart cleanup
-      detached = in = out = 0;
       clearArgs(inpArgc, inpArgs);
       cleanRedirectFiles(inFile, outFile);
+      detached = in = out = inpArgc = 0;
    }
 
    printf("Quitting myshell\n");
