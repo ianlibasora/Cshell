@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -80,4 +81,14 @@ void cleanChildren() {
       printf("Process %d ended\n", pid);
       pid = waitpid(-1, NULL, WNOHANG);
    }
+}
+
+bool checkInvalidString(char* str) {
+   // Check if string contains content and is not just whitespace characters
+   for (int i=0; i < strlen(str); ++i) {
+      if (isspace(str[i]) == 0) {
+         return false;
+      }
+   }
+   return true;
 }

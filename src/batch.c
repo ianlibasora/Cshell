@@ -50,8 +50,8 @@ int batchRunner(char* fName) {
       while (!feof(fPtr)) {
 
          cleanChildren();// Clean any present zombie processes
-         if (strlen(inp) <= 1) {
-            // Skip and restart loop if empty string
+         if (checkInvalidString(inp)) {
+            // Skip and restart loop if invalid string
             continue;
          }
 

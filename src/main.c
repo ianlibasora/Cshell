@@ -68,8 +68,8 @@ int main(int argc, char* argv[]) {
 
       cleanChildren();// Clean any present zombie processes
       inp = promptInput();// Prompts user for full complete string of user input
-      if (strlen(inp) <= 1) {
-         // Skip and restart loop if empty string
+      if (checkInvalidString(inp)) {
+         // Skip and restart loop if invalid string
          continue;
       }
 
