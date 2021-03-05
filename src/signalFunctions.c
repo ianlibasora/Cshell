@@ -34,7 +34,7 @@ void* Signal(int signum, void (*handler)(int)) {
    action.sa_flags = SA_RESTART; /* Restart syscalls if possible */
 
    if (sigaction(signum, &action, &old_action) < 0)
-      write(STDOUT_FILENO, "Sys error\n", 11);
+      write(STDOUT_FILENO, "System error\n", 11);
    return (old_action.sa_handler);
 }
 

@@ -33,7 +33,7 @@ void setShellPath(char* key) {
 }
 
 void setExePath() {
-   // set absolute path to shell executable
+   // Set absolute path to shell executable
    
    // ------------ REFERENCE -------------
 
@@ -43,13 +43,16 @@ void setExePath() {
       path[lgt] = '\0';
       setenv("SHELL", path, 1);
    }
+   // ------ END BLOCK -----
 }
 
 void getTermSize(short unsigned int* row, short unsigned int* col) {
+   // ------ REF BLOCK ----
    struct winsize termSize;
    ioctl(0, TIOCGWINSZ, &termSize);
    *col = termSize.ws_col;
    *row = termSize.ws_row;
+   // ------ END BLOCK --------
 }
 
 void getHelpPath(char* fName) {
@@ -57,7 +60,7 @@ void getHelpPath(char* fName) {
    char* path = strdup(getenv("SHELL"));
    path = realloc(path, (strlen(path) + 5) * sizeof(char));
    
-   // Transform path to exe to path to help readme
+   // Transform path to exe, to path to help readme.md file
    int i = strlen(path) - 1;
    int count = 0;
    while (0 <= i && count < 2) {
