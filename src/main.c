@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(inpArgs[0], "help")) {
          help(outFile, out, detached);
       } else {
-         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out);
+         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached);
       }
 
       // Loop restart cleanup
