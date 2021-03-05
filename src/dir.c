@@ -13,6 +13,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <dirent.h>
 
 #include "commands.h"
@@ -22,7 +23,7 @@
 
 // dir command, list contents of directory
 
-void dir(int lgt, char** lst, char* outFile, int out, bool detached) {
+int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
    // Determine paths to directories
    char path[MAXPATH];
    if (lgt == 1) {
@@ -33,28 +34,32 @@ void dir(int lgt, char** lst, char* outFile, int out, bool detached) {
       strcpy(path, lst[1]);
    }
 
-   if (detached) {
-      pid_t pid = fork();
-      if (pid == 0) {
-         // Child
-         setShellENV("PARENT", getenv("SHELL"));
+   pid_t pid = fork();
+   if (pid == 0) {
+      // Child
+      setShellENV("PARENT", getenv("SHELL"));
 
-         // Run either stdout or redirection
-         out == 0 ? ls(path): lsRedirected(path, outFile, out); 
-         exit(0);
-      } else if (pid == -1) {
-         printf("Error. Fork error occured\n");
-         exit(1);
+      // Ternayr operator: Run either stdout or redirection
+      int ret = (out == 0 ? ls(path): lsRedirected(path, outFile, out)); 
+      if (ret) {
+         // If error raised
+         exit(2);
       }
-      // Parent, does nothing, operation pushed to background
+      exit(0);
+   } else if (pid == -1) {
+      fprintf(stderr, "Error. Fork error occured\n");
+      exit(1);
    } else {
-      // Normal non detached execution
-      // Run either stdout or redirection
-      out == 0 ? ls(path): lsRedirected(path, outFile, out);
+      // Parent
+      if (!detached) {
+         // If not running detached
+         wait(NULL);
+      }
    }
+   return 0;
 }
 
-void ls(char* path) {
+int ls(char* path) {
    // Based on source material from:
    // https://www.geeksforgeeks.org/c-program-list-files-sub-directories-directory/
    
@@ -66,15 +71,16 @@ void ls(char* path) {
       }
 
    } else {
-      printf("Error. Could not open directory %s\n", path);
+      fprintf(stderr, "Error. Could not open directory %s\n", path);
+      return 1;
    }
    closedir(dPtr);
+   return 0;
 }
 
-void lsRedirected(char* path, char* outFile, int out) {
-   char op[4];
-   strcpy(op, (out == 1 ? "w": "a"));
-   FILE* fPtr = fopen(outFile, op);
+int lsRedirected(char* path, char* outFile, int out) {
+   // Ternary operator: chooses between `w` or `a`
+   FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
    
    if (fPtr != NULL) {
       // Based on source material from:
@@ -88,11 +94,14 @@ void lsRedirected(char* path, char* outFile, int out) {
          }
 
       } else {
-         printf("Error. cound not open directory %s\n", path);
+         fprintf(stderr, "Error. cound not open directory %s\n", path);
+         return 1;
       }
       closedir(dPtr);
    } else {
-      printf("Error. Error occured accessing %s\n", outFile);
+      fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+      return 1;
    }
    fclose(fPtr);
+   return 0;
 }
