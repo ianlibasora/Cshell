@@ -21,8 +21,8 @@ int echo(int lgt, char** inp, char* outFile, int out, bool detached);
 int echoRedirect(int lgt, char** lst, char* outFile, int out);
 
 // environ
-void listENV(char** envs, char* outFile, int out, bool detached);
-void listENVRedirect(char** envs, char* outFile, int out);
+int listENV(char* outFile, int out, bool detached);
+int listENVRedirect(char** envs, char* outFile, int out);
 
 // dir
 void dir(int lgt, char** lst, char* outFile, int out, bool detached);

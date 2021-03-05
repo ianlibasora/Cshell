@@ -39,7 +39,6 @@ int main(int argc, char* argv[]) {
    static char cwd[MAXPATH];
    getcwd(cwd, MAXPATH);
    setenv("PWD", cwd, 1);// Ensure that cwd is initialised properly
-   extern char** environ;// Expose environment variables
    setExePath();// Assign the absolute path to the shell executable
 
    // Shell input handling
@@ -103,7 +102,7 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(inpArgs[0], "echo")) {
          echo(inpArgc, inpArgs, outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "environ")) {
-         listENV(environ, outFile, out, detached);
+         listENV(outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "pause")) {
          pauseShell();
       } else if (!strcmp(inpArgs[0], "help")) {
