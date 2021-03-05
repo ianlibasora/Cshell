@@ -96,7 +96,7 @@ int helpRedirect(char* outFile, int out) {
 void getHelpPath(char* fName) {
    char relativePath[] = "/manual/readme.md";
    char* path = strdup(getenv("SHELL"));
-   path = realloc(path, (strlen(path) + 5) * sizeof(char));
+   path = realloc(path, (strlen(path) + 20) * sizeof(char));
    
    // Transform path to exe, to path to help readme.md file
    int i = strlen(path) - 1;
