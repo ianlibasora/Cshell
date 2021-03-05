@@ -37,7 +37,10 @@ int echo(int lgt, char** inp, char* outFile, int out, bool detached) {
          printf("\n");
       } else {
          // Run redirection
-         echoRedirect(lgt, inp, outFile, out);
+         if (echoRedirect(lgt, inp, outFile, out)) {
+            // If error raised
+            exit(2);
+         }
       }
       exit(0);
    } else if (pid == -1) {
