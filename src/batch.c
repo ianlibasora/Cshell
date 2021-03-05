@@ -83,13 +83,13 @@ int batchRunner(char* fName) {
          } else if (!strcmp(inpArgs[0], "echo")) {
             echo(inpArgc, inpArgs, outFile, out, detached);
          } else if (!strcmp(inpArgs[0], "environ")) {
-            listENV(environ, outFile, out, detached);
+            listENV(outFile, out, detached);
          } else if (!strcmp(inpArgs[0], "pause")) {
             pauseShell();
          } else if (!strcmp(inpArgs[0], "help")) {
             help(outFile, out, detached);
          } else {
-            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out);
+            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached);
          }
 
          clearArgs(inpArgc, inpArgs);
