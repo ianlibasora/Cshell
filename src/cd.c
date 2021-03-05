@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -22,6 +21,7 @@
 
 int cd(int lgt, char** inp, bool detached) {
    if (lgt == 1) {
+      // If only `cd` is invoked
       printf("%s\n", getenv("PWD"));
       return 0;
    }
@@ -39,12 +39,11 @@ int cd(int lgt, char** inp, bool detached) {
             changeDir(inp[1]);
          }
          exit(0); 
-      } else if ( pid == -1) {
-         printf("Error. Fork error occured\n");
+      } else if (pid == -1) {
+         fprintf(stderr, "Error. Fork error occured\n");
          exit(1);
       }
       // Parent does nothing
-
    } else {
       changeDir(inp[1]);
    }
@@ -53,7 +52,7 @@ int cd(int lgt, char** inp, bool detached) {
 
 void changeDir(char* path) {
    if (chdir(path) == -1) {
-      printf("cd error. %s is an invalid directory.\n", path);
+      fprintf(stderr, "cd error. %s is an invalid directory.\n", path);
    } else {
       setShellPath("PWD");
    }
