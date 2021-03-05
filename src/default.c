@@ -21,9 +21,7 @@
 
 // Default fallback system call function when command is unknown
 
-// -------  REFACTOR FOR ERROR HANDLING -------
-
-void fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out) {
+int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached) {
    // Fork and execute non internal program detached
    pid_t pid = fork();
    if (pid == 0) {
@@ -42,6 +40,8 @@ void fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, in
             if (!strcmp(lst[i], "<") || !strcmp(lst[i], ">") || !strcmp(lst[i], ">>")) {
                ++i;
                continue;
+            } else if (!strcmp(lst[i], "&")) {
+               continue;
             }
             newCmd[j] = calloc(strlen(lst[i]), sizeof(char));
             strcpy(newCmd[j], lst[i]);
@@ -52,13 +52,29 @@ void fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, in
 
          if (in) {
             FILE* stdinFile = fopen(inFile, "r");
-            dup2(fileno(stdinFile), 0);
+            if (stdinFile == NULL) {
+               fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
+               exit(2);
+            }
+            if (dup2(fileno(stdinFile), 0) == -1) {
+               fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
+               exit(2);
+            }
             fclose(stdinFile);
          }
+
          if (out != 0) {
-            FILE* stdoutFile = fopen(outFile, (out == 1 ? "w": "a"));
             // Ternary operator choose between write/append
-            dup2(fileno(stdoutFile), 1);
+            FILE* stdoutFile = fopen(outFile, (out == 1 ? "w": "a"));
+            if (stdoutFile == NULL) {
+               fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+               exit(2);
+            }
+
+            if (dup2(fileno(stdoutFile), 1) == -1) {
+               fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+               exit(2);
+            }
             fclose(stdoutFile);
          }
 
@@ -70,11 +86,14 @@ void fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, in
       }
       exit(0);
    } else if (pid == -1) {
-      printf("Error. Fork error occured\n");
+      fprintf(stderr, "Error. Fork error occured\n");
       exit(1);
    } else {
-      // Parent does nothing, but should wait for execution to finished
-      // Detached execution is offload to main shell
-      wait(NULL);
+      // Parent
+      if (!detached) {
+         // If not running detached
+         wait(NULL);
+      }
    }
+   return 0;
 }
