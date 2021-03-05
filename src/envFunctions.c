@@ -73,4 +73,5 @@ void getHelpPath(char* fName) {
    }
    strcat(path, relativePath);// Append relative path to full path
    strcpy(fName, path);
+   // Note: memory allocated for `path` is freed by the caller
 }
