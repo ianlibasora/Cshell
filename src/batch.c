@@ -35,14 +35,14 @@ int batchRunner(char* fName) {
    // Shell input handling
    char inp[MAXLINE];// Input string
    char* inpArgs[MAXARGS];// Array of strings (array of pointers)
-   int inpArgc;// Length of `inpArgs`
-   char inFile[MAXPATH];
-   char outFile[MAXPATH];
+   int inpArgc = 0;// Length of `inpArgs`
+   char inFile[MAXPATH];// Path of stdin redirection file
+   char outFile[MAXPATH];// Path of stdout redirection file
 
    // Shell redirection/detach handling
    bool detached = false;// Bools to state shell detachment
    bool in = false;
-   int out = 0;// 0: no redirection, 1: stdout tructation, 2: stdout append
+   int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
 
    FILE* fPtr = fopen(fName, "r");
    if (fPtr != NULL) {
@@ -50,15 +50,26 @@ int batchRunner(char* fName) {
       while (!feof(fPtr)) {
 
          cleanChildren();// Clean any present zombie processes
+         if (strlen(inp) <= 1) {
+            // Skip and restart loop if empty string
+            continue;
+         }
 
-         inpArgc = splitString(inp, inpArgs, MAXARGS);
-         detached = checkDetached(inpArgc, inpArgs);
+         // Split string into array of args
+         if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
+            // Error handle invalid args
+            clearArgs(inpArgc, inpArgs);
+            detached = in = out = inpArgc = 0;
+            continue;
+         }
+         detached = checkDetached(inpArgc, inpArgs);// Check if running detached
 
-         // If the redirection handling fails, reset and restart the loop
+         // Checks and validates redirection and finds files associated with redirection
          if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
-            detached = in = out = 0;
+            // If the redirection handling fails, reset and restart the loop
             clearArgs(inpArgc, inpArgs);
             cleanRedirectFiles(inFile, outFile);
+            detached = in = out = inpArgc = 0;
             fgets(inp, MAXLINE, fPtr);
             continue;
          } 
@@ -81,14 +92,14 @@ int batchRunner(char* fName) {
             fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out);
          }
 
-         fgets(inp, MAXLINE, fPtr);
-         detached = in = out = 0;
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
+         detached = in = out = inpArgc = 0;
+         fgets(inp, MAXLINE, fPtr);
       }
 
    } else {
-      printf("Error. Error accessing %s\n", fName);
+      fprintf(stderr, "Error. Error accessing %s\n", fName);
       fclose(fPtr);
       exit(1);
    }
