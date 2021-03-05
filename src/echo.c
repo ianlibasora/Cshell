@@ -20,7 +20,7 @@
 
 // echo command
 
-void echo(int lgt, char** inp, char* outFile, int out, bool detached) {
+int echo(int lgt, char** inp, char* outFile, int out, bool detached) {
    if (detached) {
       pid_t pid = fork();
       if (pid == 0) {
@@ -41,7 +41,7 @@ void echo(int lgt, char** inp, char* outFile, int out, bool detached) {
          }
          exit(0);
       } else if (pid == -1) {
-         printf("Error. Fork error occured\n");
+         fprintf(stderr, "Error. Fork error occured\n");
          exit(1);
       }
       // Parent does nothing
@@ -53,6 +53,7 @@ void echo(int lgt, char** inp, char* outFile, int out, bool detached) {
             printf("%s ", inp[i]);
          }
          printf("\n");
+         return 0;
       } else {
          // Run redirection
          echoRedirect(lgt, inp, outFile, out);
@@ -60,14 +61,14 @@ void echo(int lgt, char** inp, char* outFile, int out, bool detached) {
    }
 }
 
-void echoRedirect(int lgt, char** lst, char* outFile, int out) {
-   char op[4];
-   strcpy(op, (out == 1 ? "w": "a"));
-
-   FILE* fPtr = fopen(outFile, op);
+int echoRedirect(int lgt, char** lst, char* outFile, int out) {
+   // Ternary operator: chooses between `w` or `a` depending on value of `out`
+   FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
    if (fPtr != NULL) {
       int i = 1;
       while (i < lgt && strcmp(lst[i], "&")) {
+         // If redirection character encountered, skip 2 indexes
+         // Note: can assume that `lst` has been checked that all redirection is valid
          if (!strcmp(lst[i], "<") || !strcmp(lst[i], ">") || !strcmp(lst[i], ">>")) {
             i += 2;
          } else {
@@ -77,7 +78,9 @@ void echoRedirect(int lgt, char** lst, char* outFile, int out) {
       }
       fprintf(fPtr, "\n");
    } else {
-      printf("Error. Error occured accessing %s\n", outFile);
+      fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+      return 1;
    }
    fclose(fPtr);
+   return 0;
 }
