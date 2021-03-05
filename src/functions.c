@@ -32,19 +32,19 @@ char* promptInput() {
 
    char* uName = getenv("USER");
    gethostname(host, MAXHOST);
-   char* cwd = getenv("PWD");//Note: cd will handle if new cwd will be invalid
+   char* cwd = getenv("PWD");// Note: cd command handles invalid cwd
 
-   printf("%s%s@%s%s:", COLGREEN, uName, host, COLRESET);//Print username@hostmachine
-   printf("%s%s%s$ ", COLBLUE, cwd, COLRESET);//Print cwd
+   printf("%s%s@%s%s:", COLGREEN, uName, host, COLRESET);// Print username@hostmachine
+   printf("%s%s%s$ ", COLBLUE, cwd, COLRESET);// Print cwd
 
    static char inp[MAXINPUT];
    fgets(inp, MAXINPUT, stdin);
    return inp;
 }
 
-int splitString(char* str, char** lst, int max) {
+int splitString(char* str, int* lgt, char** lst, int max) {
    char* arg;
-   int i = 0;//lst index / final used length
+   int i = 0;// lst index / final used length
    
    // ------ REFERENCE NOTES PAGE ------
    arg = strtok(str, " \t\n");
@@ -57,8 +57,12 @@ int splitString(char* str, char** lst, int max) {
    }
    // Set last element NULL
    lst[i] = NULL;
-
-   return i;
+   *lgt = i;
+   if (i == max) {
+      fprintf(stderr, "Warning. Max number of arguments reached. Command invalid\n");
+      return 1;
+   }
+   return 0;
 }
 
 void clearArgs(int lgt, char** lst) {
