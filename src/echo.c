@@ -14,6 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 #include "commands.h"
 #include "enviroments.h"
@@ -21,43 +22,34 @@
 // echo command
 
 int echo(int lgt, char** inp, char* outFile, int out, bool detached) {
-   if (detached) {
-      pid_t pid = fork();
-      if (pid == 0) {
-         // Child
-         setShellENV("PARENT", getenv("SHELL"));
+   pid_t pid = fork();
+   if (pid == 0) {
+      // Child
+      setShellENV("PARENT", getenv("SHELL"));
 
-         if (out == 0) {
-            // Run no redirection
-            int i = 1;
-            while (i < lgt && strcmp(inp[i], "&")) {
-               printf("%s ", inp[i]);
-               ++i;
-            }
-            printf("\n");
-         } else {
-            // Run redirection
-            echoRedirect(lgt, inp, outFile, out);
-         }
-         exit(0);
-      } else if (pid == -1) {
-         fprintf(stderr, "Error. Fork error occured\n");
-         exit(1);
-      }
-      // Parent does nothing
-   } else {
-      // Normal non detached operation
       if (out == 0) {
          // Run no redirection
-         for (int i=1; i < lgt; ++i) {
+         int i = 1;
+         while (i < lgt && strcmp(inp[i], "&")) {
             printf("%s ", inp[i]);
+            ++i;
          }
          printf("\n");
-         return 0;
       } else {
          // Run redirection
          echoRedirect(lgt, inp, outFile, out);
       }
+      exit(0);
+   } else if (pid == -1) {
+      fprintf(stderr, "Error. Fork error occured\n");
+      exit(1);
+   } else {
+      // Parent
+      if (!detached) {
+         // If not running detached, wait
+         wait(NULL);
+      }
+      return 0;
    }
 }
 
