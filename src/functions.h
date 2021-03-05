@@ -16,6 +16,7 @@ char* promptInput();
 int splitString(char* str, int* lgt, char** lst, int max);
 void clearArgs(int lgt, char** lst);
 void cleanChildren();
+bool checkInvalidString(char* str);
 
-// BatchRunner.c functions
+// Matchmode function
 int batchRunner(char* fName);
