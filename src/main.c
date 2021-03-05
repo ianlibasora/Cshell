@@ -25,13 +25,12 @@
 #define MAXARGS 100
 #define MAXPATH 250
 
-
 // ----- ref os book
 sigjmp_buf buf;
 // ------ END BLOCK
 
 int main(int argc, char* argv[]) {
-   if (argc == 2) {
+   if (argc > 1) {
       // If argv supplied, run in batch mode
       batchRunner(argv[1]);
       exit(0);
@@ -46,24 +45,22 @@ int main(int argc, char* argv[]) {
    // Shell input handling
    char* inp;// Input string pointer
    char* inpArgs[MAXARGS];// Array of strings (array of pointers)
-   int inpArgc;// Length of `inpArgs`
-   char inFile[MAXPATH];
-   char outFile[MAXPATH];
+   int inpArgc = 0;// Length of `inpArgs`
+   char inFile[MAXPATH];// Path of stdin redirection file
+   char outFile[MAXPATH];// Path of stdout redirection file
 
    // Shell redirection/detach handling
-   bool detached = false;//Bools to state shell detachment
+   bool detached = false;// Bools to state shell detachment
    bool in = false;
-   int out = 0;// 0: no redirection, 1: stdout tructation, 2: stdout append
+   int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
 
    bool run = true;
    while (run) {
-
-
       // ----------- REF BLOCK FROM OS
       if (!sigsetjmp(buf, 1)) {
          Signal(SIGINT, handler);
       } else {
-         // If SIGINT triggers, cleanup shell before for new prompt
+         // If SIGINT triggers, cleanup shell before new prompt
          detached = in = out = 0;
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
@@ -73,13 +70,13 @@ int main(int argc, char* argv[]) {
       cleanChildren();// Clean any present zombie processes
       inp = promptInput();// Full complete string of user input
       if (strlen(inp) <= 1) {
-         // skip and continue loop if empty string
+         // Skip and restart loop if empty string
          continue;
       }
+      inpArgc = splitString(inp, inpArgs, MAXARGS);// Split string into array of args
+      detached = checkDetached(inpArgc, inpArgs);// Check if running detached
 
-      inpArgc = splitString(inp, inpArgs, MAXARGS);
-      detached = checkDetached(inpArgc, inpArgs);
-
+      // Checks and validates redirection and finds files associated with redirection
       // If the redirection handling fails, reset and restart the loop
       if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
          detached = in = out = 0;
@@ -108,6 +105,7 @@ int main(int argc, char* argv[]) {
          fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out);
       }
 
+      // Loop restart cleanup
       detached = in = out = 0;
       clearArgs(inpArgc, inpArgs);
       cleanRedirectFiles(inFile, outFile);
