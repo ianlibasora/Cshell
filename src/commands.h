@@ -36,7 +36,7 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
 int pauseShell();
 
 // Help
-void help(char* outFile, int out, bool detached);
+int help(char* outFile, int out, bool detached);
 int promptHelp();
-void helpRedirect(char* outFile, int out);
-int calcOffset(int lgt, int maxBuffer);
+int helpRedirect(char* outFile, int out);
+void getHelpPath(char* fName);
