@@ -68,12 +68,18 @@ int main(int argc, char* argv[]) {
       // ------- END BLOCK
 
       cleanChildren();// Clean any present zombie processes
-      inp = promptInput();// Full complete string of user input
+      inp = promptInput();// Prompts user for full complete string of user input
       if (strlen(inp) <= 1) {
          // Skip and restart loop if empty string
          continue;
       }
-      inpArgc = splitString(inp, inpArgs, MAXARGS);// Split string into array of args
+
+      // Split string into array of args
+      if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
+         clearArgs(inpArgc, inpArgs);
+         detached = in = out = inpArgc = 0;
+         continue;
+      }
       detached = checkDetached(inpArgc, inpArgs);// Check if running detached
 
       // Checks and validates redirection and finds files associated with redirection
@@ -83,7 +89,7 @@ int main(int argc, char* argv[]) {
          cleanRedirectFiles(inFile, outFile);
          detached = in = out = inpArgc = 0;
          continue;
-      } 
+      }
 
       if (!strcmp(inpArgs[0], "quit")) {
          run = false;
