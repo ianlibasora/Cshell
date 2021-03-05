@@ -76,6 +76,7 @@ int main(int argc, char* argv[]) {
 
       // Split string into array of args
       if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
+         // Error handle invalid args
          clearArgs(inpArgc, inpArgs);
          detached = in = out = inpArgc = 0;
          continue;
@@ -83,8 +84,8 @@ int main(int argc, char* argv[]) {
       detached = checkDetached(inpArgc, inpArgs);// Check if running detached
 
       // Checks and validates redirection and finds files associated with redirection
-      // If the redirection handling fails, reset and restart the loop
       if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
+         // If the redirection handling fails, reset and restart the loop
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
          detached = in = out = inpArgc = 0;

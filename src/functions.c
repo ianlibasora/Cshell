@@ -55,13 +55,14 @@ int splitString(char* str, int* lgt, char** lst, int max) {
 
       arg = strtok(NULL, " \t\n");
    }
+   if (i == max) {
+      fprintf(stderr, "Warning. Max number of arguments reached. Command invalid and rejected\n");
+      return 1;
+   }
+
    // Set last element NULL
    lst[i] = NULL;
    *lgt = i;
-   if (i == max) {
-      fprintf(stderr, "Warning. Max number of arguments reached. Command invalid\n");
-      return 1;
-   }
    return 0;
 }
 
