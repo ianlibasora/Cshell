@@ -25,9 +25,9 @@ int listENV(char* outFile, int out, bool detached);
 int listENVRedirect(char** envs, char* outFile, int out);
 
 // dir
-void dir(int lgt, char** lst, char* outFile, int out, bool detached);
-void ls(char* path);
-void lsRedirected(char* path, char* outFile, int out);
+int dir(int lgt, char** lst, char* outFile, int out, bool detached);
+int ls(char* path);
+int lsRedirected(char* path, char* outFile, int out);
 
 // fallback execution
 void fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out);
