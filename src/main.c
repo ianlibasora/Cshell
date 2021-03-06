@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
    char outFile[MAXPATH];// Path of stdout redirection file
 
    // Shell redirection/detach handling
-   bool detached = false;// Bools to state shell detachment
-   bool in = false;
+   bool detached = false;// Bool to state shell detachment
+   bool in = false;// Bool to state stdin redirection
    int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
 
    bool run = true;

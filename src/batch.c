@@ -29,7 +29,6 @@ int batchRunner(char* fName) {
    static char cwd[MAXPATH];
    getcwd(cwd, MAXPATH);
    setenv("PWD", cwd, 1);// Ensure that cwd is initialised properly
-   extern char** environ;// Expose environment variables
    setExePath();// Assign the absolute path to the shell executable
 
    // Shell input handling
@@ -40,15 +39,14 @@ int batchRunner(char* fName) {
    char outFile[MAXPATH];// Path of stdout redirection file
 
    // Shell redirection/detach handling
-   bool detached = false;// Bools to state shell detachment
-   bool in = false;
+   bool detached = false;// Bool to state shell detachment
+   bool in = false;// Bool to state stdin redirection
    int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
 
    FILE* fPtr = fopen(fName, "r");
    if (fPtr != NULL) {
       fgets(inp, MAXLINE, fPtr);
       while (!feof(fPtr)) {
-
          cleanChildren();// Clean any present zombie processes
          if (checkInvalidString(inp)) {
             // Skip and restart loop if invalid string
@@ -92,6 +90,7 @@ int batchRunner(char* fName) {
             fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached);
          }
 
+         // Loop restart cleanup
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
          detached = in = out = inpArgc = 0;
