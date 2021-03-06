@@ -18,11 +18,12 @@
 
 // Signal handling functions
 
-// ------ REFERENCE FROM 801, 811 OF OS BOOK
-
-// Changes:
-// *Signal declaration
-// prints to write
+// ---------- REFERENCE BLOCK ---------
+// Code snippet from: Randal E. Bryant, David R. O’Hallaron - Computer Systems. A Programmer’s Perspective [3rd ed.] (2016, Pearson)
+// Pg 811, fig 8.44
+// Code contains minor modifications to fit the purpose of a shell signal handler
+// Line 30 function definition modified to comply with types
+// Line 38 modfied to be async-signal safe
 
 sigjmp_buf buf;
 
@@ -41,5 +42,4 @@ void* Signal(int signum, void (*handler)(int)) {
 void handler(int sig) {
    siglongjmp(buf, 1);
 }
-
-// ------------ END REF BLOCK -----------------
+// ---------- END BLOCK ---------

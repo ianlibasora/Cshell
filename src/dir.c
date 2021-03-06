@@ -60,9 +60,10 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
 }
 
 int ls(char* path) {
-   // Based on source material from:
-   // https://www.geeksforgeeks.org/c-program-list-files-sub-directories-directory/
-   
+   // ---------- REFERENCE BLOCK ---------
+   // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
+   // With minor style modifications to line(s) 70, 71, 75
+
    DIR *dPtr = opendir(path);
    struct dirent *dir;
    if (dPtr) {
@@ -75,6 +76,8 @@ int ls(char* path) {
       return 1;
    }
    closedir(dPtr);
+   // ---------- CLOSE BLOCK ----------
+
    return 0;
 }
 
@@ -83,8 +86,9 @@ int lsRedirected(char* path, char* outFile, int out) {
    FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
    
    if (fPtr != NULL) {
-      // Based on source material from:
-      // https://www.geeksforgeeks.org/c-program-list-files-sub-directories-directory/
+      // ---------- REFERENCE BLOCK ---------
+      // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
+      // With minor style modifications to line(s) 96, 97, 101
    
       DIR *dPtr = opendir(path);
       struct dirent *dir;
@@ -98,6 +102,7 @@ int lsRedirected(char* path, char* outFile, int out) {
          return 1;
       }
       closedir(dPtr);
+      // ---------- CLOSE BLOCK ----------
    } else {
       fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
       return 1;

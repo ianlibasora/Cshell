@@ -25,9 +25,7 @@
 #define MAXARGS 100
 #define MAXPATH 250
 
-// ----- ref os book
 sigjmp_buf buf;
-// ------ END BLOCK
 
 int main(int argc, char* argv[]) {
    if (argc > 1) {
@@ -55,7 +53,12 @@ int main(int argc, char* argv[]) {
 
    bool run = true;
    while (run) {
-      // ----------- REF BLOCK FROM OS
+      // ---------- REFERENCE BLOCK ---------
+      // Code snippet from: Randal E. Bryant, David R. O’Hallaron - Computer Systems. A Programmer’s Perspective [3rd ed.] (2016, Pearson)
+      // Pg 811, fig 8.44
+      // Code contains minor modifications to fit the purpose of a shell signal handler
+      // Function source code located in `signalFunctions.c`
+
       if (!sigsetjmp(buf, 1)) {
          Signal(SIGINT, handler);
       } else {
@@ -64,7 +67,7 @@ int main(int argc, char* argv[]) {
          cleanRedirectFiles(inFile, outFile);
          detached = in = out = inpArgc = 0;
       }
-      // ------- END BLOCK
+      // ---------- END BLOCK ---------
 
       cleanChildren();// Clean any present zombie processes
       inp = promptInput();// Prompts user for full complete string of user input
