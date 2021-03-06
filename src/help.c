@@ -72,10 +72,8 @@ int helpRedirect(char* outFile, int out) {
       FILE* manFilePtr = fopen(helpFile, "r");
       
       if (manFilePtr != NULL) {
-         fgets(line, MAXLINE, manFilePtr);
-         while (!feof(manFilePtr)) {
+         while (fgets(line, MAXLINE, manFilePtr) != NULL) {
             fprintf(outFilePtr, "%s", line);
-            fgets(line, MAXLINE, manFilePtr);
          }
 
       } else {
