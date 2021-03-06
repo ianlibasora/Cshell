@@ -47,7 +47,6 @@ int splitString(char* str, int* lgt, char** lst, int max) {
    char* arg;
    int i = 0;// lst index / final used length
    
-   // ------ REFERENCE NOTES PAGE ------
    arg = strtok(str, " \t\n");
    while (arg != NULL && i < max) {
       lst[i] = calloc(strlen(arg), sizeof(char));

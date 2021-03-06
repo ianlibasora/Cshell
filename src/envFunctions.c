@@ -34,8 +34,6 @@ void setShellPath(char* key) {
 
 void setExePath() {
    // Set absolute path to shell executable
-   
-   // ------------ REFERENCE -------------
 
    static char path[MAXPATH];
    size_t lgt = readlink("/proc/self/exe", path, sizeof(path) - 1);
@@ -43,5 +41,4 @@ void setExePath() {
       path[lgt] = '\0';
       setenv("SHELL", path, 1);
    }
-   // ------ END BLOCK -----
 }
