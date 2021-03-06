@@ -27,29 +27,28 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
+
+      // Rm redirection/detachment related args
+      // Can assume that handler has checked for invalid argument sequence  
+      char* newCmd[lgt];
+      int j = 0;// newCmd index
+      // i = lst index
+      for (int i=0; i < lgt; ++i) {
+         if (!strcmp(lst[i], "<") || !strcmp(lst[i], ">") || !strcmp(lst[i], ">>")) {
+            ++i;
+            continue;
+         } else if (!strcmp(lst[i], "&")) {
+            continue;
+         }
+         newCmd[j] = calloc(strlen(lst[i]), sizeof(char));
+         strcpy(newCmd[j], lst[i]);
+         ++j;
+      }
+      // Set last index of newCmd to NULL
+      newCmd[j] = NULL;
       
       if (in || out != 0) {
          // If stdin/stdout redirection active
-         // Rm redirection related args
-         // Can assume that redirection handler has checked for invalid redirection invokation
-         
-         char* newCmd[lgt];
-         int j = 0;// newCmd index
-         // i = lst index
-         for (int i=0; i < lgt; ++i) {
-            if (!strcmp(lst[i], "<") || !strcmp(lst[i], ">") || !strcmp(lst[i], ">>")) {
-               ++i;
-               continue;
-            } else if (!strcmp(lst[i], "&")) {
-               continue;
-            }
-            newCmd[j] = calloc(strlen(lst[i]), sizeof(char));
-            strcpy(newCmd[j], lst[i]);
-            ++j;
-         }
-         // Set last index of newCmd to NULL
-         newCmd[j] = NULL;
-
          if (in) {
             FILE* stdinFile = fopen(inFile, "r");
             if (stdinFile == NULL) {
@@ -78,12 +77,10 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
             fclose(stdoutFile);
          }
 
-         execvp(newCmd[0], newCmd);
-         clearArgs(j, newCmd);
-      } else {
-         // Run normal no redirection
-         execvp(lst[0], lst);
       }
+
+      execvp(newCmd[0], newCmd);
+      clearArgs(j, newCmd);
       exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
