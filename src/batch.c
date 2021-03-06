@@ -45,9 +45,9 @@ int batchRunner(char* fName) {
 
    FILE* fPtr = fopen(fName, "r");
    if (fPtr != NULL) {
-      fgets(inp, MAXLINE, fPtr);
-      while (!feof(fPtr)) {
+      while (fgets(inp, MAXLINE, fPtr) != NULL) {
          cleanChildren();// Clean any present zombie processes
+         printf("Input: %s\n", inp);
          if (checkInvalidString(inp)) {
             // Skip and restart loop if invalid string
             continue;
@@ -68,7 +68,6 @@ int batchRunner(char* fName) {
             clearArgs(inpArgc, inpArgs);
             cleanRedirectFiles(inFile, outFile);
             detached = in = out = inpArgc = 0;
-            fgets(inp, MAXLINE, fPtr);
             continue;
          } 
 
@@ -94,7 +93,6 @@ int batchRunner(char* fName) {
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
          detached = in = out = inpArgc = 0;
-         fgets(inp, MAXLINE, fPtr);
       }
 
    } else {
