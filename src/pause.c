@@ -19,7 +19,7 @@
 
 // Pause command, sleep till `enter` key from user
 
-int pauseShell() {
+int pauseShell(bool detached) {
    // Hold until the user presses `enter`
    // Uses the getpass() to stop input echo
    pid_t pid = fork();
@@ -35,10 +35,9 @@ int pauseShell() {
       exit(1);
    } else {
       // Parent
-
-      // Pause is forked into a child process, but main process still waits
-      // Mirrors how the `sleep` command forks into a new process with `bash`
-      wait(NULL);
+      if (!detached) {
+         wait(NULL);
+      }
    }
    return 0;
 }
