@@ -33,7 +33,7 @@ int lsRedirected(char* path, char* outFile, int out);
 int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached);
 
 // pause
-int pauseShell();
+int pauseShell(bool detached);
 
 // Help
 int help(char* outFile, int out, bool detached);

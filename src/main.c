@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(inpArgs[0], "environ")) {
          listENV(outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "pause")) {
-         pauseShell();
+         pauseShell(detached);
       } else if (!strcmp(inpArgs[0], "help")) {
          help(outFile, out, detached);
       } else {
