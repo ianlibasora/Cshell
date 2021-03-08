@@ -31,6 +31,7 @@ int batchRunner(char* fName) {
    setenv("PWD", cwd, 1);// Ensure that cwd is initialised properly
    setExePath();// Assign the absolute path to the shell executable
 
+
    // Shell input handling
    char inp[MAXLINE];// Input string
    char* inpArgs[MAXARGS];// Array of strings (array of pointers)
@@ -38,10 +39,20 @@ int batchRunner(char* fName) {
    char inFile[MAXPATH];// Path of stdin redirection file
    char outFile[MAXPATH];// Path of stdout redirection file
 
+
    // Shell redirection/detach handling
+   // Note: 
+   // All commands, excluding `quit`, `cd`, `clear`, `environ` run as children of the parent process
+   // These are refered to as `Non-Always` and `Always` children commands
+   // Detachment is determined by if the parent process should wait for the child process
+   // cd however is still able to be run detached
+
    bool detached = false;// Bool to state shell detachment
    bool in = false;// Bool to state stdin redirection
    int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
+
+
+   // Note: batchmode does not feature signal handling
 
    FILE* fPtr = fopen(fName, "r");
    if (fPtr != NULL) {
@@ -71,22 +82,26 @@ int batchRunner(char* fName) {
             continue;
          } 
 
+         // Non-Always children commands
          if (!strcmp(inpArgs[0], "cd")) {
             cd(inpArgc, inpArgs, detached);
          } else if (!strcmp(inpArgs[0], "clr")) {
             system("clear");
-         } else if (!strcmp(inpArgs[0], "dir")) {
-            dir(inpArgc, inpArgs, outFile, out, detached);
-         } else if (!strcmp(inpArgs[0], "echo")) {
-            echo(inpArgc, inpArgs, outFile, out, detached);
          } else if (!strcmp(inpArgs[0], "environ")) {
             listENV(outFile, out, detached);
+         }
+         
+         // Always children commands
+         if (!strcmp(inpArgs[0], "dir")) {
+            dir(inpArgc, inpArgs, outFile, out, detached, 0);
+         } else if (!strcmp(inpArgs[0], "echo")) {
+            echo(inpArgc, inpArgs, outFile, out, detached, 0);
          } else if (!strcmp(inpArgs[0], "pause")) {
-            pauseShell(detached);
+            pauseShell(detached, 0);
          } else if (!strcmp(inpArgs[0], "help")) {
-            help(outFile, out, detached);
+            help(outFile, out, detached, 0);
          } else {
-            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached);
+            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, 0);
          }
 
          // Loop restart cleanup

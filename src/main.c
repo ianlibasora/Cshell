@@ -46,10 +46,27 @@ int main(int argc, char* argv[]) {
    char inFile[MAXPATH];// Path of stdin redirection file
    char outFile[MAXPATH];// Path of stdout redirection file
 
+
    // Shell redirection/detach handling
+   // Note: 
+   // All commands, excluding `quit`, `cd`, `clear`, `environ` run as children of the parent process
+   // These are refered to as `Non-Always` and `Always` children commands
+   // Detachment is determined by if the parent process should wait for the child process
+   // cd however is still able to be run detached
+
    bool detached = false;// Bool to state shell detachment
    bool in = false;// Bool to state stdin redirection
    int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
+
+
+   // Shell signal handling
+   // When shell enters a command execution section, signal handling becomes active
+   // If a SIGINT were to be raised, the signal handler will reset the loop, and kill the child process
+   // Only used for commands `Always Children`
+   // Note: will not kill detached processes due to the `active` flag being false
+
+   bool active = false;// Bool to state if command execution in progress
+   int killPID;// Pid of active process
 
    bool run = true;
    while (run) {
@@ -66,6 +83,13 @@ int main(int argc, char* argv[]) {
          clearArgs(inpArgc, inpArgs);
          cleanRedirectFiles(inFile, outFile);
          detached = in = out = inpArgc = 0;
+
+         // Additional signal handling for (non-detached) child process SIGINT
+         // Kills the unreapable process from SIGINT
+         if (active) {
+            kill(killPID, SIGTERM);
+         }
+         active = false;
       }
       // ---------- END BLOCK ---------
 
@@ -94,25 +118,31 @@ int main(int argc, char* argv[]) {
          continue;
       }
 
+      // Non-Always children commands
       if (!strcmp(inpArgs[0], "quit")) {
          run = false;
       } else if (!strcmp(inpArgs[0], "cd")) {
          cd(inpArgc, inpArgs, detached);
       } else if (!strcmp(inpArgs[0], "clr")) {
          system("clear");
-      } else if (!strcmp(inpArgs[0], "dir")) {
-         dir(inpArgc, inpArgs, outFile, out, detached);
-      } else if (!strcmp(inpArgs[0], "echo")) {
-         echo(inpArgc, inpArgs, outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "environ")) {
          listENV(outFile, out, detached);
-      } else if (!strcmp(inpArgs[0], "pause")) {
-         pauseShell(detached);
-      } else if (!strcmp(inpArgs[0], "help")) {
-         help(outFile, out, detached);
-      } else {
-         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached);
       }
+      
+      // Always children commands
+      active = true;
+      if (!strcmp(inpArgs[0], "dir")) {
+         dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
+      } else if (!strcmp(inpArgs[0], "echo")) {
+         echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
+      } else if (!strcmp(inpArgs[0], "pause")) {
+         pauseShell(detached, &killPID);
+      } else if (!strcmp(inpArgs[0], "help")) {
+         help(outFile, out, detached, &killPID);
+      } else {
+         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
+      }
+      active = false;
 
       // Loop restart cleanup
       clearArgs(inpArgc, inpArgs);
