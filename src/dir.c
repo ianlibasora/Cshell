@@ -39,7 +39,7 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
 
-      // Ternayr operator: Run either stdout or redirection
+      // Ternary operator: Run either stdout or redirection
       int ret = (out == 0 ? ls(path): lsRedirected(path, outFile, out)); 
       if (ret) {
          // If error raised
