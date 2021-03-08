@@ -19,13 +19,14 @@
 
 // Pause command, sleep till `enter` key from user
 
-int pauseShell(bool detached) {
+int pauseShell(bool detached, int* killPID) {
    // Hold until the user presses `enter`
    // Uses the getpass() to stop input echo
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
+      *killPID = getpid();
 
       char* tmp = getpass("Press ENTER to continue ");
       free(tmp);

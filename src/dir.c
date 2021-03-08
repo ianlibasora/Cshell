@@ -23,7 +23,7 @@
 
 // dir command, list contents of directory
 
-int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
+int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID) {
    // Determine paths to directories
    char path[MAXPATH];
    if (lgt == 1) {
@@ -38,6 +38,7 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached) {
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
+      *killPID = getpid();
 
       // Ternary operator: Run either stdout or redirection
       int ret = (out == 0 ? ls(path): lsRedirected(path, outFile, out)); 

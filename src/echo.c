@@ -21,11 +21,12 @@
 
 // echo command
 
-int echo(int lgt, char** inp, char* outFile, int out, bool detached) {
+int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPID) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
+      *killPID = getpid();
 
       if (out == 0) {
          // Run no redirection

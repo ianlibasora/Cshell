@@ -24,11 +24,12 @@
 
 // Help command
 
-int help(char* outFile, int out, bool detached) {
+int help(char* outFile, int out, bool detached, int* killPID) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
+      *killPID = getpid();
 
       // Choose between either normal/redirection operation
       int ret = (out == 0 ? promptHelp(): helpRedirect(outFile, out));

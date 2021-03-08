@@ -21,12 +21,13 @@
 
 // Default fallback system call function when command is unknown
 
-int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached) {
+int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached, int* killPID) {
    // Fork and execute non internal program detached
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
+      *killPID = getpid();
 
       // Rm redirection/detachment related args
       // Can assume that handler has checked for invalid argument sequence  
