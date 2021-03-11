@@ -13,7 +13,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 
 #include "commands.h"
 #include "enviroments.h"
@@ -21,7 +20,7 @@
 
 // Default fallback system call function when command is unknown
 
-int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached, int* killPID) {
+int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, int* killPID) {
    // Fork and execute non internal program detached
    pid_t pid = fork();
    if (pid == 0) {
@@ -86,12 +85,8 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
       exit(1);
-   } else {
-      // Parent
-      if (!detached) {
-         // If not running detached
-         wait(NULL);
-      }
    }
+   // Parent does nothing
+   // Waiting/detachment handled by main
    return 0;
 }

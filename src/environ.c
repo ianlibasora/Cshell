@@ -20,36 +20,13 @@
 
 // environ command, display all environment variables
 
-int listENV(char* outFile, int out, bool detached) {
-   if (detached) {
-      pid_t pid = fork();
-      if (pid == 0) {
-         // Child
-         setShellENV("PARENT", getenv("SHELL"));
-         extern char** environ;// Exposes environment variables
-
-         if (out == 0) {
-            // Run no redirection
-            for (int i=0; environ[i]; ++i) {
-               printf("%s\n", environ[i]);
-            }
-         } else {
-            // Run redirection
-            if (listENVRedirect(environ, outFile, out)) {
-               // If error raised
-               exit(2);
-            }
-         }
-         exit(0);
-      } else if (pid == -1) {
-         fprintf(stderr, "Error. Fork error occured\n");
-         exit(1);
-      }
-      // Parent does nothing
-   } else {
-      // Normal non detached operation
-      
+int listENV(char* outFile, int out) {
+   pid_t pid = fork();
+   if (pid == 0) {
+      // Child
+      setShellENV("PARENT", getenv("SHELL"));
       extern char** environ;// Exposes environment variables
+
       if (out == 0) {
          // Run no redirection
          for (int i=0; environ[i]; ++i) {
@@ -59,10 +36,16 @@ int listENV(char* outFile, int out, bool detached) {
          // Run redirection
          if (listENVRedirect(environ, outFile, out)) {
             // If error raised
-            return 2;
+            exit(2);
          }
       }
+      exit(0);
+   } else if (pid == -1) {
+      fprintf(stderr, "Error. Fork error occured\n");
+      exit(1);
    }
+   // Parent does nothing
+   // Waiting/detachment handled by main
    return 0;
 }
 

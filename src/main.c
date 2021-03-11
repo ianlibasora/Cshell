@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <setjmp.h>
+#include <sys/wait.h>
 
 #include "functions.h"// Shell operation functions
 #include "commands.h"// Shell commands
@@ -49,7 +50,7 @@ int main(int argc, char* argv[]) {
 
    // Shell redirection/detach handling
    // Note: 
-   // All commands, excluding `quit`, `cd`, `clear`, `environ` run as children of the parent process
+   // All commands, excluding `quit`, `cd`, `clear` run as children of the parent process
    // These are refered to as `Non-Always` and `Always` children commands
    // Detachment is determined by if the parent process should wait for the child process
    // cd however is still able to be run detached
@@ -118,31 +119,40 @@ int main(int argc, char* argv[]) {
          continue;
       }
 
+
       // Non-Always children commands
       if (!strcmp(inpArgs[0], "quit")) {
          run = false;
       } else if (!strcmp(inpArgs[0], "cd")) {
          cd(inpArgc, inpArgs, detached);
+         detached = false;// Ensure that cd & does not cause stoopage
       } else if (!strcmp(inpArgs[0], "clr")) {
          system("clear");
-      } else if (!strcmp(inpArgs[0], "environ")) {
-         listENV(outFile, out, detached);
-      }
+      } 
       
+
       // Always children commands
       active = true;
-      if (!strcmp(inpArgs[0], "dir")) {
-         dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
+      if (!strcmp(inpArgs[0], "environ")) {
+         listENV(outFile, out);
+      } else if (!strcmp(inpArgs[0], "dir")) {
+         dir(inpArgc, inpArgs, outFile, out, &killPID);
       } else if (!strcmp(inpArgs[0], "echo")) {
-         echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
+         echo(inpArgc, inpArgs, outFile, out, &killPID);
       } else if (!strcmp(inpArgs[0], "pause")) {
-         pauseShell(detached, &killPID);
+         pauseShell(&killPID);
       } else if (!strcmp(inpArgs[0], "help")) {
-         help(outFile, out, detached, &killPID);
+         help(outFile, out, &killPID);
       } else {
-         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
+         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, &killPID);
+      }
+      
+      if (!detached) {
+         // If not detached
+         wait(NULL);
       }
       active = false;
+
 
       // Loop restart cleanup
       clearArgs(inpArgc, inpArgs);

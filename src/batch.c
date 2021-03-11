@@ -13,6 +13,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include "functions.h"// Shell operation functions
 #include "commands.h"// Shell commands
@@ -42,8 +43,8 @@ int batchRunner(char* fName) {
 
    // Shell redirection/detach handling
    // Note: 
-   // All commands, excluding `quit`, `cd`, `clear`, `environ` run as children of the parent process
-   // These are refered to as `Non-Always` and `Always` children commands
+   // All commands, excluding `quit`, `cd`, `clear` run as children of the parent process
+   // These are refered to as `Always` and `Non-Always` children commands
    // Detachment is determined by if the parent process should wait for the child process
    // cd however is still able to be run detached
 
@@ -82,26 +83,34 @@ int batchRunner(char* fName) {
             continue;
          } 
 
+
          // Non-Always children commands
          if (!strcmp(inpArgs[0], "cd")) {
             cd(inpArgc, inpArgs, detached);
+            detached = false;// Ensure that cd & does not cause stoopage
          } else if (!strcmp(inpArgs[0], "clr")) {
             system("clear");
-         } else if (!strcmp(inpArgs[0], "environ")) {
-            listENV(outFile, out, detached);
+         } 
+      
+
+         // Always children commands
+         if (!strcmp(inpArgs[0], "environ")) {
+            listENV(outFile, out);
+         } else if (!strcmp(inpArgs[0], "dir")) {
+            dir(inpArgc, inpArgs, outFile, out, 0);
+         } else if (!strcmp(inpArgs[0], "echo")) {
+            echo(inpArgc, inpArgs, outFile, out, 0);
+         } else if (!strcmp(inpArgs[0], "pause")) {
+            pauseShell(0);
+         } else if (!strcmp(inpArgs[0], "help")) {
+            help(outFile, out, 0);
+         } else {
+            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, 0);
          }
          
-         // Always children commands
-         if (!strcmp(inpArgs[0], "dir")) {
-            dir(inpArgc, inpArgs, outFile, out, detached, 0);
-         } else if (!strcmp(inpArgs[0], "echo")) {
-            echo(inpArgc, inpArgs, outFile, out, detached, 0);
-         } else if (!strcmp(inpArgs[0], "pause")) {
-            pauseShell(detached, 0);
-         } else if (!strcmp(inpArgs[0], "help")) {
-            help(outFile, out, detached, 0);
-         } else {
-            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, 0);
+         if (!detached) {
+            // If not detached
+            wait(NULL);
          }
 
          // Loop restart cleanup

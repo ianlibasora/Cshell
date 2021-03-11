@@ -13,7 +13,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 #include <dirent.h>
 
 #include "commands.h"
@@ -23,7 +22,7 @@
 
 // dir command, list contents of directory
 
-int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID) {
+int dir(int lgt, char** lst, char* outFile, int out, int* killPID) {
    // Determine paths to directories
    char path[MAXPATH];
    if (lgt == 1) {
@@ -50,13 +49,9 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
       exit(1);
-   } else {
-      // Parent
-      if (!detached) {
-         // If not running detached
-         wait(NULL);
-      }
    }
+   // Parent does nothing
+   // Waiting/detachment handled by main
    return 0;
 }
 

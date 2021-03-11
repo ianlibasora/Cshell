@@ -12,14 +12,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 
 #include "commands.h"
 #include "enviroments.h"
 
 // Pause command, sleep till `enter` key from user
 
-int pauseShell(bool detached, int* killPID) {
+int pauseShell(int* killPID) {
    // Hold until the user presses `enter`
    // Uses the getpass() to stop input echo
    pid_t pid = fork();
@@ -34,11 +33,8 @@ int pauseShell(bool detached, int* killPID) {
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
       exit(1);
-   } else {
-      // Parent
-      if (!detached) {
-         wait(NULL);
-      }
    }
+   // Parent does nothing
+   // Waiting/detachment handled by main
    return 0;
 }

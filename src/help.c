@@ -14,7 +14,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 
 #include "commands.h"
 #include "enviroments.h"
@@ -24,7 +23,7 @@
 
 // Help command
 
-int help(char* outFile, int out, bool detached, int* killPID) {
+int help(char* outFile, int out, int* killPID) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
@@ -41,13 +40,9 @@ int help(char* outFile, int out, bool detached, int* killPID) {
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
       exit(1);
-   } else {
-      // Parent
-      if (!detached) {
-         // If not running detached
-         wait(NULL);
-      }
    }
+   // Parent does nothing
+   // Waiting/detachment handled by main
    return 0;
 }
 

@@ -14,14 +14,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 
 #include "commands.h"
 #include "enviroments.h"
 
 // echo command
 
-int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPID) {
+int echo(int lgt, char** inp, char* outFile, int out, int* killPID) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
@@ -47,14 +46,10 @@ int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPI
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
       exit(1);
-   } else {
-      // Parent
-      if (!detached) {
-         // If not running detached, wait
-         wait(NULL);
-      }
-      return 0;
    }
+   // Parent does nothing
+   // Waiting/detachment handled by main
+   return 0;
 }
 
 int echoRedirect(int lgt, char** lst, char* outFile, int out) {
