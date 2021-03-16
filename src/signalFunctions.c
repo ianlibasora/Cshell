@@ -43,3 +43,7 @@ void handler(int sig) {
    siglongjmp(buf, 1);
 }
 // ---------- END BLOCK ---------
+
+void disabledHandler(int sig) {
+   // Do nothing
+}
