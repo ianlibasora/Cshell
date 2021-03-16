@@ -10,9 +10,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+
+#include "sigFunctions.h"
+#include <signal.h>
 
 #include "commands.h"
 #include "enviroments.h"
@@ -22,11 +26,19 @@
 
 int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, int* killPID) {
    // Fork and execute non internal program detached
+   
+   if (lgt == 1 && checkInterpreter(lst[0])) {
+      // If external command to to open an interpreter
+      // Disable the custom signal handler
+      // Signal handler gets restarted when the shell returns back to the prompt loop
+      Signal(SIGINT, disabledHandler);
+   }
+   
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
-      *killPID = getpid();
+      *killPID = getpid(); 
 
       // Rm redirection/detachment related args
       // Can assume that handler has checked for invalid argument sequence  
@@ -89,4 +101,21 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
    // Parent does nothing
    // Waiting/detachment handled by main
    return 0;
+}
+
+bool checkInterpreter(char* arg) {
+   // Check if external command is to open an interpreter
+   char interP[4][10] = {
+      "python", 
+      "python3", 
+      "ipython3", 
+      "node"
+   };
+
+   for (int i=0; i < 4; ++i) {
+      if (!strcmp(interP[i], arg)) {
+         return true;
+      }
+   }
+   return false;
 }

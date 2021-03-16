@@ -31,6 +31,7 @@ int lsRedirected(char* path, char* outFile, int out);
 
 // fallback execution
 int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, int* killPID);
+bool checkInterpreter(char* arg);
 
 // pause
 int pauseShell(int* killPID);
