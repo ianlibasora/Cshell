@@ -47,3 +47,11 @@ void handler(int sig) {
 void disabledHandler(int sig) {
    // Do nothing
 }
+
+void maskSIGINT() {
+   sigset_t mask;
+
+   sigemptyset(&mask);
+   sigaddset(&mask, SIGINT);
+   sigprocmask(SIG_BLOCK, &mask, NULL);
+}

@@ -13,3 +13,4 @@ Student Name: Joseph Libasora
 void* Signal(int signum, void (*handler)(int));
 void handler(int sig);
 void disabledHandler(int sig);
+void maskSIGINT();
