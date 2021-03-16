@@ -123,28 +123,30 @@ int main(int argc, char* argv[]) {
       // Non-Always children commands
       if (!strcmp(inpArgs[0], "quit")) {
          run = false;
+         detached = false;
       } else if (!strcmp(inpArgs[0], "cd")) {
          cd(inpArgc, inpArgs, detached);
-         detached = false;// Ensure that cd & does not cause stoopage
+         detached = false;
       } else if (!strcmp(inpArgs[0], "clr")) {
          system("clear");
+         detached = false;
       } 
       
 
       // Always children commands
       active = true;
       if (!strcmp(inpArgs[0], "environ")) {
-         listENV(outFile, out);
+         listENV(outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "dir")) {
-         dir(inpArgc, inpArgs, outFile, out, &killPID);
+         dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
       } else if (!strcmp(inpArgs[0], "echo")) {
-         echo(inpArgc, inpArgs, outFile, out, &killPID);
+         echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
       } else if (!strcmp(inpArgs[0], "pause")) {
-         pauseShell(&killPID);
+         pauseShell(detached, &killPID);
       } else if (!strcmp(inpArgs[0], "help")) {
-         help(outFile, out, &killPID);
+         help(outFile, out, detached, &killPID);
       } else {
-         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, &killPID);
+         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
       }
       
       if (!detached) {

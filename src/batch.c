@@ -87,25 +87,26 @@ int batchRunner(char* fName) {
          // Non-Always children commands
          if (!strcmp(inpArgs[0], "cd")) {
             cd(inpArgc, inpArgs, detached);
-            detached = false;// Ensure that cd & does not cause stoopage
+            detached = false;
          } else if (!strcmp(inpArgs[0], "clr")) {
             system("clear");
+            detached = false;
          } 
       
 
          // Always children commands
          if (!strcmp(inpArgs[0], "environ")) {
-            listENV(outFile, out);
+            listENV(outFile, out, detached);
          } else if (!strcmp(inpArgs[0], "dir")) {
-            dir(inpArgc, inpArgs, outFile, out, 0);
+            dir(inpArgc, inpArgs, outFile, out, detached, 0);
          } else if (!strcmp(inpArgs[0], "echo")) {
-            echo(inpArgc, inpArgs, outFile, out, 0);
+            echo(inpArgc, inpArgs, outFile, out, detached, 0);
          } else if (!strcmp(inpArgs[0], "pause")) {
-            pauseShell(0);
+            pauseShell(detached, 0);
          } else if (!strcmp(inpArgs[0], "help")) {
-            help(outFile, out, 0);
+            help(outFile, out, detached, 0);
          } else {
-            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, 0);
+            fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, 0);
          }
          
          if (!detached) {

@@ -14,17 +14,16 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-
-#include "sigFunctions.h"
 #include <signal.h>
 
 #include "commands.h"
 #include "enviroments.h"
 #include "functions.h"
+#include "sigFunctions.h"
 
 // Default fallback system call function when command is unknown
 
-int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, int* killPID) {
+int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached, int* killPID) {
    // Fork and execute non internal program detached
    
    if (lgt == 1 && checkInterpreter(lst[0])) {
@@ -39,6 +38,11 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
       // Child
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid(); 
+
+      if (detached) {
+         // If detached, mask SIGINT
+         maskSIGINT();
+      }
 
       // Rm redirection/detachment related args
       // Can assume that handler has checked for invalid argument sequence  

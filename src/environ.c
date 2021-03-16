@@ -17,15 +17,21 @@
 
 #include "commands.h"
 #include "enviroments.h"
+#include "sigFunctions.h"
 
 // environ command, display all environment variables
 
-int listENV(char* outFile, int out) {
+int listENV(char* outFile, int out, bool detached) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
       extern char** environ;// Exposes environment variables
+
+      if (detached) {
+         // If detached, mask SIGINT
+         maskSIGINT();
+      }
 
       if (out == 0) {
          // Run no redirection

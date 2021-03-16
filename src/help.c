@@ -17,18 +17,24 @@
 
 #include "commands.h"
 #include "enviroments.h"
+#include "sigFunctions.h"
 
 #define MAXLINE 500
 #define MAXPATH 250
 
 // Help command
 
-int help(char* outFile, int out, int* killPID) {
+int help(char* outFile, int out, bool detached, int* killPID) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
+
+      if (detached) {
+         // If detached, mask SIGINT
+         maskSIGINT();
+      }
 
       // Choose between either normal/redirection operation
       int ret = (out == 0 ? promptHelp(): helpRedirect(outFile, out));

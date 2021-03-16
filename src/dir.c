@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -17,12 +18,13 @@
 
 #include "commands.h"
 #include "enviroments.h"
+#include "sigFunctions.h"
 
 #define MAXPATH 200
 
 // dir command, list contents of directory
 
-int dir(int lgt, char** lst, char* outFile, int out, int* killPID) {
+int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID) {
    // Determine paths to directories
    char path[MAXPATH];
    if (lgt == 1) {
@@ -38,6 +40,11 @@ int dir(int lgt, char** lst, char* outFile, int out, int* killPID) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
+
+      if (detached) {
+         // If detached, mask SIGINT
+         maskSIGINT();
+      }
 
       // Ternary operator: Run either stdout or redirection
       int ret = (out == 0 ? ls(path): lsRedirected(path, outFile, out)); 

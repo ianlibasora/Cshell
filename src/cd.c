@@ -16,6 +16,7 @@
 
 #include "commands.h"
 #include "enviroments.h"
+#include "sigFunctions.h"
 
 // cd command
 
@@ -31,6 +32,9 @@ int cd(int lgt, char** inp, bool detached) {
       if (pid == 0) {
          // Child
          setShellENV("PARENT", getenv("SHELL"));
+
+         // If detached, mask SIGINT
+         maskSIGINT();
 
          if (lgt == 2) {
             // Case: `cd &`
