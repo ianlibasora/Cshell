@@ -65,7 +65,7 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID
 int ls(char* path) {
    // ---------- REFERENCE BLOCK ---------
    // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
-   // With minor style modifications to line(s) 70, 71, 75
+   // With minor style modifications to line(s) 70, 72, 78
 
    DIR *dPtr = opendir(path);
    struct dirent *dir;
@@ -91,7 +91,7 @@ int lsRedirected(char* path, char* outFile, int out) {
    if (fPtr != NULL) {
       // ---------- REFERENCE BLOCK ---------
       // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
-      // With minor style modifications to line(s) 96, 97, 101
+      // With minor style modifications to line(s) 96, 98, 104
    
       DIR *dPtr = opendir(path);
       struct dirent *dir;

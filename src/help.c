@@ -36,7 +36,7 @@ int help(char* outFile, int out, bool detached, int* killPID) {
          maskSIGINT();
       }
 
-      // Choose between either normal/redirection operation
+      // Ternayr operator: choose between either stdout/redirection operation
       int ret = (out == 0 ? promptHelp(): helpRedirect(outFile, out));
       if (ret) {
          // If error raised
@@ -83,7 +83,6 @@ int helpRedirect(char* outFile, int out) {
          return 1;
       }
       fclose(manFilePtr);
-
    } else {
       fprintf(stderr, "Error. Error accessing %s\n", outFile);
       return 1;
