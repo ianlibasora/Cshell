@@ -147,6 +147,9 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(inpArgs[0], "help")) {
          active = true;
          help(outFile, out, detached, &killPID);
+      } else if (!strcmp(inpArgs[0], "rename")) {
+         active = true;
+         chName(inpArgc, inpArgs, detached, &killPID);
       } else {
          active = true;
          fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);

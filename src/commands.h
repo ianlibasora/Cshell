@@ -41,3 +41,6 @@ int help(char* outFile, int out, bool detached, int* killPID);
 int promptHelp();
 int helpRedirect(char* outFile, int out);
 void getHelpPath(char* fName);
+
+// Rename
+int chName(int lgt, char** lst, bool detached, int* killPID);
