@@ -26,10 +26,16 @@
 int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached, int* killPID) {
    // Fork and execute non internal program detached
    
-   if (lgt == 1 && checkInterpreter(lst[0])) {
-      // If external command to to open an interpreter
+   if (checkInterpreter(lgt, lst[0], detached)) {
+      // If external command is to open an interpreter
       // Disable the custom signal handler
       // Signal handler gets restarted when the shell returns back to the prompt loop
+      
+      if (detached) {
+         // Stop the user if interpreter is being run detached
+         fprintf(stderr, "Warning. Cannot run an interpreter detached.\n");
+         return 1;
+      }
       Signal(SIGINT, disabledHandler);
    }
    
@@ -107,7 +113,7 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
    return 0;
 }
 
-bool checkInterpreter(char* arg) {
+bool checkInterpreter(int lgt, char* arg, bool detached) {
    // Check if external command is to open an interpreter
    char interP[4][10] = {
       "python", 
@@ -115,6 +121,12 @@ bool checkInterpreter(char* arg) {
       "ipython3", 
       "node"
    };
+
+   if (detached && lgt != 2 || !detached && lgt != 1) {
+      // Allow cases of detachment to pass for now
+      // Handle detachment issue later
+      return false;
+   }
 
    for (int i=0; i < 4; ++i) {
       if (!strcmp(interP[i], arg)) {
