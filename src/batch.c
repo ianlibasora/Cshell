@@ -103,6 +103,8 @@ int batchRunner(char* fName) {
             pauseShell(detached, 0);
          } else if (!strcmp(inpArgs[0], "help")) {
             help(outFile, out, detached, 0);
+         } else if (!strcmp(inpArgs[0], "rename")) {
+            chName(inpArgc, inpArgs, detached, 0);
          } else {
             fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, 0);
          }
