@@ -58,6 +58,7 @@ int listENV(char* outFile, int out, bool detached) {
 int listENVRedirect(char** envs, char* outFile, int out) {
    // Ternary operator: chooses between `w` or `a`
    FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
+   
    if (fPtr != NULL) {
       for (int i=0; envs[i]; ++i) {
          fprintf(fPtr, "%s\n", envs[i]);

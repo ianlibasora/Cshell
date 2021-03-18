@@ -61,6 +61,7 @@ int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPI
 int echoRedirect(int lgt, char** lst, char* outFile, int out) {
    // Ternary operator: chooses between `w` or `a` depending on value of `out`
    FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
+   
    if (fPtr != NULL) {
       int i = 1;
       while (i < lgt && strcmp(lst[i], "&")) {
@@ -73,6 +74,7 @@ int echoRedirect(int lgt, char** lst, char* outFile, int out) {
             ++i;
          }
       }
+      
       fprintf(fPtr, "\n");
    } else {
       fprintf(stderr, "Error. Error occured accessing %s\n", outFile);

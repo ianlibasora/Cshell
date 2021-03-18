@@ -63,36 +63,36 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
       // Set last index of newCmd to NULL
       newCmd[j] = NULL;
       
-      if (in || out != 0) {
-         // If stdin/stdout redirection active
-         if (in) {
-            FILE* stdinFile = fopen(inFile, "r");
-            if (stdinFile == NULL) {
-               fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
-               exit(2);
-            }
-            if (dup2(fileno(stdinFile), 0) == -1) {
-               fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
-               exit(2);
-            }
-            fclose(stdinFile);
+      if (in) {
+         // If stdin redirection active
+         FILE* stdinFile = fopen(inFile, "r");
+         
+         if (stdinFile == NULL) {
+            fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
+            exit(2);
+         }
+         if (dup2(fileno(stdinFile), 0) == -1) {
+            fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
+            exit(2);
+         }
+         fclose(stdinFile);
+      }
+
+      if (out != 0) {
+         // If stdout redirection active
+         // Ternary operator choose between write/append
+         FILE* stdoutFile = fopen(outFile, (out == 1 ? "w": "a"));
+         
+         if (stdoutFile == NULL) {
+            fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+            exit(2);
          }
 
-         if (out != 0) {
-            // Ternary operator choose between write/append
-            FILE* stdoutFile = fopen(outFile, (out == 1 ? "w": "a"));
-            if (stdoutFile == NULL) {
-               fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
-               exit(2);
-            }
-
-            if (dup2(fileno(stdoutFile), 1) == -1) {
-               fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
-               exit(2);
-            }
-            fclose(stdoutFile);
+         if (dup2(fileno(stdoutFile), 1) == -1) {
+            fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+            exit(2);
          }
-
+         fclose(stdoutFile);
       }
 
       execvp(newCmd[0], newCmd);
