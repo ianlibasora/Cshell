@@ -131,21 +131,24 @@ int main(int argc, char* argv[]) {
          system("clear");
          detached = false;
       } 
-      
-
       // Always children commands
-      active = true;
-      if (!strcmp(inpArgs[0], "environ")) {
+      else if (!strcmp(inpArgs[0], "environ")) {
+         active = true;
          listENV(outFile, out, detached);
       } else if (!strcmp(inpArgs[0], "dir")) {
+         active = true;
          dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
       } else if (!strcmp(inpArgs[0], "echo")) {
+         active = true;
          echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
       } else if (!strcmp(inpArgs[0], "pause")) {
+         active = true;
          pauseShell(detached, &killPID);
       } else if (!strcmp(inpArgs[0], "help")) {
+         active = true;
          help(outFile, out, detached, &killPID);
       } else {
+         active = true;
          fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
       }
       

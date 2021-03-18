@@ -92,10 +92,8 @@ int batchRunner(char* fName) {
             system("clear");
             detached = false;
          } 
-      
-
          // Always children commands
-         if (!strcmp(inpArgs[0], "environ")) {
+         else if (!strcmp(inpArgs[0], "environ")) {
             listENV(outFile, out, detached);
          } else if (!strcmp(inpArgs[0], "dir")) {
             dir(inpArgc, inpArgs, outFile, out, detached, 0);
