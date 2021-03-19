@@ -63,7 +63,6 @@ int promptHelp() {
 }
 
 int helpRedirect(char* outFile, int out) {
-   char line[MAXLINE];
    char* helpFile = calloc(MAXPATH, sizeof(char));
    getHelpPath(helpFile);
    
@@ -74,8 +73,10 @@ int helpRedirect(char* outFile, int out) {
       FILE* manFilePtr = fopen(helpFile, "r");
       
       if (manFilePtr != NULL) {
-         while (fgets(line, MAXLINE, manFilePtr) != NULL) {
-            fprintf(outFilePtr, "%s", line);
+         char c = fgetc(manFilePtr);
+         while (!feof(manFilePtr)) {
+            fprintf(outFilePtr, "%c", c);
+            c = fgetc(manFilePtr);
          }
 
       } else {
