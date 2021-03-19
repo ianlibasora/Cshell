@@ -29,10 +29,16 @@
 sigjmp_buf buf;
 
 int main(int argc, char* argv[]) {
+   bool prompt;
    if (argc > 1) {
       // If argv supplied, run in batch mode
-      batchRunner(argv[1]);
-      exit(0);
+      if (batchRunner(argv[1])) {
+         // If error occured
+         exit(1);
+      }
+      prompt = false;
+   } else {
+      prompt = true;
    }
 
    static char cwd[MAXPATH];
@@ -77,6 +83,8 @@ int main(int argc, char* argv[]) {
       // Code contains minor modifications to fit the purpose of a shell signal handler
       // Function source code located in `signalFunctions.c`
 
+      int count = 0;
+
       if (!sigsetjmp(buf, 1)) {
          Signal(SIGINT, handler);
       } else {
@@ -95,7 +103,11 @@ int main(int argc, char* argv[]) {
       // ---------- END BLOCK ---------
 
       cleanChildren();// Clean any present zombie processes
-      inp = promptInput();// Prompts user for full complete string of user input
+      inp = promptInput(prompt);// Prompts user for full complete string of user input
+      if (feof(stdin)) {
+         break;
+      }
+      
       if (checkInvalidString(inp)) {
          // Skip and restart loop if invalid string
          continue;
@@ -122,8 +134,7 @@ int main(int argc, char* argv[]) {
 
       // Non-Always children commands
       if (!strcmp(inpArgs[0], "quit")) {
-         run = false;
-         detached = false;
+         break;
       } else if (!strcmp(inpArgs[0], "cd")) {
          cd(inpArgc, inpArgs, detached);
          detached = false;

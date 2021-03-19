@@ -28,15 +28,17 @@
 
 // Functions for main.c shell operation
 
-char* promptInput() {
+char* promptInput(bool prompt) {
    char host[MAXHOST];
 
    char* uName = getenv("USER");
    gethostname(host, MAXHOST);
    char* cwd = getenv("PWD");// Note: cd command handles invalid cwd
 
-   printf("%s%s@%s%s:", COLGREEN, uName, host, COLRESET);// Print username@hostmachine
-   printf("%s%s%s$ ", COLBLUE, cwd, COLRESET);// Print cwd
+   if (prompt) {
+      printf("%s%s@%s%s:", COLGREEN, uName, host, COLRESET);// Print username@hostmachine
+      printf("%s%s%s$ ", COLBLUE, cwd, COLRESET);// Print cwd
+   }
 
    static char inp[MAXINPUT];
    fgets(inp, MAXINPUT, stdin);

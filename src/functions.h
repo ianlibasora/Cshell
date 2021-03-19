@@ -12,7 +12,7 @@
 
 // Headerfile for functions handling shell operation (main.c)
 
-char* promptInput();
+char* promptInput(bool prompt);
 int splitString(char* str, int* lgt, char** lst, int max);
 void clearArgs(int lgt, char** lst);
 void cleanChildren();
