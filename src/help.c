@@ -93,7 +93,7 @@ int helpRedirect(char* outFile, int out) {
 }
 
 void getHelpPath(char* fName) {
-   char relativePath[] = "/manual/readme.md";
+   char relativePath[] = "/manual/readme";
    char* path = strdup(getenv("SHELL"));
    path = realloc(path, (strlen(path) + 20) * sizeof(char));
    

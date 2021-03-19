@@ -1,100 +1,38 @@
-0hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-1hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-2hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-3hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-4hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-5hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-6hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-7hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-8hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-9hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-10hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-11hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-12hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-13hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-14hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-15hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-16hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-17hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-18hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-19hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-20hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-21hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-22hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-23hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-24hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-25hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-26hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-27hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-28hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-29hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-30hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-31hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-32hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-33hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-34hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-35hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-36hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-37hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-38hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-39hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-40hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-41hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-42hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-43hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-44hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-45hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-46hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-47hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-48hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-49hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-50hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-51hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-52hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-53hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-54hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-55hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-56hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-57hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-58hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-59hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-60hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-61hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-62hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-63hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-64hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-65hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-66hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-67hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-68hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-69hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-70hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-71hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-72hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-73hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-74hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-75hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-76hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-77hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-78hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-79hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-80hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-81hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-82hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-83hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-84hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-85hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-86hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-87hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-88hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-89hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-90hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-91hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-92hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-93hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-94hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-95hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-96hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-97hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-98hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
-99hello world lorem ipsum 1234 testing the help readme file. this string is being extra long to test line wrapping
+## Makefile and Compilation
+
+
+### Overview
+Written in the C programming language, the myshell project must be first compiled before it can be executed. To manage this, a number of makefiles are included with this project. Located throughout the project, the primary makefile resides in the `/bin` directory. All other makefiles as such, are simply just for ease of use, passing commands back to the primary makefile for execution. In total, there are 3 makefiles attached with this project, located in: 
+- `/` project root
+- `/bin` directory
+- `/src` directory
+
+Whenever the user wishes to use the makefiles, they should be located in one of these three directories. 
+
+
+### Makefile options
+To call the makefile to execute a certain operation, the user must type the prefix `make`, followed by the desired command into the command line, separated by a space. For example:
+```
+make build
+```
+
+The makefiles come with 3 commands which the user may invoke:
+
+- ### build (default)
+   The `build` command is the default command which the makefile will execute when invoked. Tasked with compiling and linking all the necessary source files, it creates the executable for the myshell shell, and places it inside the `/bin` directory. As the default command, the user can also invoke this command through just invoking `make`. This shortcut executes the default command of a makefile.
+
+
+- ### run
+   The `run` command executes everything that the `build` command executes, with the addition that once compilation has finished, it will automatically start the myshell shell. 
+
+
+- ### clean
+   The `clean` command deletes the myshell executable, along with any compilation generated files.
+
+
+## ***REMOVED***
+
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
