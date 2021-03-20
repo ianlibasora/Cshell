@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 
 
    // Shell redirection/detach handling
-   // Note: 
+   // Note:
    // All commands, excluding `quit`, `cd`, `clear` run as children of the parent process
    // These are refered to as `Non-Always` and `Always` children commands
    // Detachment is determined by if the parent process should wait for the child process
@@ -83,8 +83,6 @@ int main(int argc, char* argv[]) {
       // Code contains minor modifications to fit the purpose of a shell signal handler
       // Function source code located in `signalFunctions.c`
 
-      int count = 0;
-
       if (!sigsetjmp(buf, 1)) {
          Signal(SIGINT, handler);
       } else {
@@ -107,7 +105,7 @@ int main(int argc, char* argv[]) {
       if (feof(stdin)) {
          break;
       }
-      
+
       if (checkInvalidString(inp)) {
          // Skip and restart loop if invalid string
          continue;
@@ -141,7 +139,7 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(inpArgs[0], "clr")) {
          system("clear");
          detached = false;
-      } 
+      }
       // Always children commands
       else if (!strcmp(inpArgs[0], "environ")) {
          active = true;
@@ -165,7 +163,7 @@ int main(int argc, char* argv[]) {
          active = true;
          fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
       }
-      
+
       if (!detached) {
          // If not detached
          wait(NULL);

@@ -25,7 +25,7 @@ int chName(int lgt, char** lst, bool detached, int* killPID) {
       fprintf(stderr, "Error. Invalid arguments for rename\n");
       return 1;
    }
-   
+
    pid_t pid = fork();
    if (pid == 0) {
       // Child
@@ -40,12 +40,12 @@ int chName(int lgt, char** lst, bool detached, int* killPID) {
       // Rename arg[1] to arg[2]
       if (rename(lst[1], lst[2]) != 0) {
          fprintf(stderr, "Error. Unable to rename %s to %s\n", lst[1], lst[2]);
-         exit(1);
+         _exit(1);
       }
-      exit(0);
+      _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
-      exit(2);
+      _exit(2);
    }
    // Parent does nothing
    // Waiting/detachment handled by main

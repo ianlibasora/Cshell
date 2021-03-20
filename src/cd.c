@@ -42,10 +42,10 @@ int cd(int lgt, char** inp, bool detached) {
          } else {
             changeDir(inp[1]);
          }
-         exit(0); 
+         _exit(0);
       } else if (pid == -1) {
          fprintf(stderr, "Error. Fork error occured\n");
-         exit(1);
+         _exit(1);
       }
       // Parent does nothing
    } else {

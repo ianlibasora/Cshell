@@ -45,13 +45,13 @@ int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPI
          // Run redirection
          if (echoRedirect(lgt, inp, outFile, out)) {
             // If error raised
-            exit(2);
+            _exit(2);
          }
       }
-      exit(0);
+      _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
-      exit(1);
+      _exit(1);
    }
    // Parent does nothing
    // Waiting/detachment handled by main
@@ -61,7 +61,7 @@ int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPI
 int echoRedirect(int lgt, char** lst, char* outFile, int out) {
    // Ternary operator: chooses between `w` or `a` depending on value of `out`
    FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
-   
+
    if (fPtr != NULL) {
       int i = 1;
       while (i < lgt && strcmp(lst[i], "&")) {
@@ -74,7 +74,7 @@ int echoRedirect(int lgt, char** lst, char* outFile, int out) {
             ++i;
          }
       }
-      
+
       fprintf(fPtr, "\n");
    } else {
       fprintf(stderr, "Error. Error occured accessing %s\n", outFile);

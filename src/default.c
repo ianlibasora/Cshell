@@ -25,12 +25,12 @@
 
 int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached, int* killPID) {
    // Fork and execute non internal program detached
-   
+
    if (checkInterpreter(lgt, lst[0], detached)) {
       // If external command is to open an interpreter
       // Disable the custom signal handler
       // Signal handler gets restarted when the shell returns back to the prompt loop
-      
+
       if (detached) {
          // Stop the user if interpreter is being run detached
          fprintf(stderr, "Warning. Cannot run an interpreter detached.\n");
@@ -38,12 +38,12 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
       }
       Signal(SIGINT, disabledHandler);
    }
-   
+
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
-      *killPID = getpid(); 
+      *killPID = getpid();
 
       if (detached) {
          // If detached, mask SIGINT
@@ -51,7 +51,7 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
       }
 
       // Rm redirection/detachment related args
-      // Can assume that handler has checked for invalid argument sequence  
+      // Can assume that handler has checked for invalid argument sequence
       char* newCmd[lgt];
       int j = 0;// newCmd index
       // i = lst index
@@ -68,18 +68,18 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
       }
       // Set last index of newCmd to NULL
       newCmd[j] = NULL;
-      
+
       if (in) {
          // If stdin redirection active
          FILE* stdinFile = fopen(inFile, "r");
-         
+
          if (stdinFile == NULL) {
             fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
-            exit(2);
+            _exit(2);
          }
          if (dup2(fileno(stdinFile), 0) == -1) {
             fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
-            exit(2);
+            _exit(2);
          }
          fclose(stdinFile);
       }
@@ -88,25 +88,25 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
          // If stdout redirection active
          // Ternary operator choose between write/append
          FILE* stdoutFile = fopen(outFile, (out == 1 ? "w": "a"));
-         
+
          if (stdoutFile == NULL) {
             fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
-            exit(2);
+            _exit(2);
          }
 
          if (dup2(fileno(stdoutFile), 1) == -1) {
             fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
-            exit(2);
+            _exit(2);
          }
          fclose(stdoutFile);
       }
 
       execvp(newCmd[0], newCmd);
       clearArgs(j, newCmd);
-      exit(0);
+      _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
-      exit(1);
+      _exit(1);
    }
    // Parent does nothing
    // Waiting/detachment handled by main
@@ -116,9 +116,9 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
 bool checkInterpreter(int lgt, char* arg, bool detached) {
    // Check if external command is to open an interpreter
    char interP[4][10] = {
-      "python", 
-      "python3", 
-      "ipython3", 
+      "python",
+      "python3",
+      "ipython3",
       "node"
    };
 
