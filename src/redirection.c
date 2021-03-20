@@ -47,7 +47,7 @@ int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool de
    // Return 0 on sucess
    bool in, out;
    in = out = false;
-   
+
    for (int i=0; i < lgt; ++i) {
       if (!in && !strcmp(lst[i], "<")) {
          // If < detected

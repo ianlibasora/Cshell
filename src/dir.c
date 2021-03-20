@@ -47,15 +47,15 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID
       }
 
       // Ternary operator: Run either stdout or redirection
-      int ret = (out == 0 ? ls(path): lsRedirected(path, outFile, out)); 
+      int ret = (out == 0 ? ls(path): lsRedirected(path, outFile, out));
       if (ret) {
          // If error raised
-         exit(2);
+         _exit(2);
       }
-      exit(0);
+      _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
-      exit(1);
+      _exit(1);
    }
    // Parent does nothing
    // Waiting/detachment handled by main
@@ -87,12 +87,12 @@ int ls(char* path) {
 int lsRedirected(char* path, char* outFile, int out) {
    // Ternary operator: chooses between `w` or `a`
    FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
-   
+
    if (fPtr != NULL) {
       // ---------- REFERENCE BLOCK ---------
       // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
       // With minor style modifications to line(s) 96, 98, 104
-   
+
       DIR *dPtr = opendir(path);
       struct dirent *dir;
       if (dPtr) {

@@ -36,10 +36,10 @@ int pauseShell(bool detached, int* killPID) {
 
       char* tmp = getpass("Press ENTER to continue ");
       free(tmp);
-      exit(0);
+      _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
-      exit(1);
+      _exit(1);
    }
    // Parent does nothing
    // Waiting/detachment handled by main

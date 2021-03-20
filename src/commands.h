@@ -36,11 +36,11 @@ bool checkInterpreter(int lgt, char* arg, bool detached);
 // pause
 int pauseShell(bool detached, int* killPID);
 
-// Help
+// help
 int help(char* outFile, int out, bool detached, int* killPID);
 int promptHelp();
 int helpRedirect(char* outFile, int out);
 void getHelpPath(char* fName);
 
-// Rename
+// rename
 int chName(int lgt, char** lst, bool detached, int* killPID);

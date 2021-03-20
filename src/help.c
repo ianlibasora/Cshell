@@ -40,12 +40,12 @@ int help(char* outFile, int out, bool detached, int* killPID) {
       int ret = (out == 0 ? promptHelp(): helpRedirect(outFile, out));
       if (ret) {
          // If error raised
-         exit(2);
+         _exit(2);
       }
-      exit(0);         
+      _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
-      exit(1);
+      _exit(1);
    }
    // Parent does nothing
    // Waiting/detachment handled by main
@@ -65,13 +65,13 @@ int promptHelp() {
 int helpRedirect(char* outFile, int out) {
    char* helpFile = calloc(MAXPATH, sizeof(char));
    getHelpPath(helpFile);
-   
+
    // Ternary operator: chooses between `w` or `a`
    FILE* outFilePtr = fopen(outFile, (out == 1 ? "w": "a"));
 
    if (outFilePtr != NULL) {
       FILE* manFilePtr = fopen(helpFile, "r");
-      
+
       if (manFilePtr != NULL) {
          char c = fgetc(manFilePtr);
          while (!feof(manFilePtr)) {
@@ -97,7 +97,7 @@ void getHelpPath(char* fName) {
    char relativePath[] = "/manual/readme";
    char* path = strdup(getenv("SHELL"));
    path = realloc(path, (strlen(path) + 20) * sizeof(char));
-   
+
    // Transform path to exe, to path to help readme.md file
    int i = strlen(path) - 1;
    int count = 0;

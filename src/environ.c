@@ -42,13 +42,13 @@ int listENV(char* outFile, int out, bool detached) {
          // Run redirection
          if (listENVRedirect(environ, outFile, out)) {
             // If error raised
-            exit(2);
+            _exit(2);
          }
       }
-      exit(0);
+      _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
-      exit(1);
+      _exit(1);
    }
    // Parent does nothing
    // Waiting/detachment handled by main
@@ -58,7 +58,7 @@ int listENV(char* outFile, int out, bool detached) {
 int listENVRedirect(char** envs, char* outFile, int out) {
    // Ternary operator: chooses between `w` or `a`
    FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
-   
+
    if (fPtr != NULL) {
       for (int i=0; envs[i]; ++i) {
          fprintf(fPtr, "%s\n", envs[i]);
