@@ -1,16 +1,9 @@
 
-# ***REMOVED***
-
-# ***REMOVED***
-
-# ***REMOVED***
-# ***REMOVED***
-
 # Primary makefile responsible for builds/cleans/runs of c code and executables
 
 CFILES = $(wildcard ../src/*.c)
 OFILES = $(patsubst %.c, %.o, $(CFILES))
-EXEFILE = ./myshell
+EXEFILE = ./cshell
 
 build: $(EXEFILE)
 	@true
@@ -22,6 +15,6 @@ clean:
 	rm -f $(OFILES) $(EXEFILE) *~
 
 run: $(EXEFILE)
-	./myshell
+	./cshell
 
 .PHONY: run build clean

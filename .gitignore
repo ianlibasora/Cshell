@@ -1,13 +1,5 @@
-
-# ***REMOVED***
-
-# ***REMOVED***
-
-# ***REMOVED***
-# ***REMOVED***
-
 .vscode
-bin/myshell
+bin/cshell
 src/*.o
 bin/*.txt
 *.txt

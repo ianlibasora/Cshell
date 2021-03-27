@@ -1,11 +1,4 @@
 
-# ***REMOVED***
-
-# ***REMOVED***
-
-# ***REMOVED***
-# ***REMOVED***
-
 # src directory makefile
 # This makefile is just for ease of use and just calls the makefile inside `/bin`
 

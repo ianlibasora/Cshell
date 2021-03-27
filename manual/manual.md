@@ -1,15 +1,15 @@
-# Myshell User Usage Manual
+# Cshell User Usage Manual
 
 
 ## Description
-Myshell is a command line interface  through which a user may interface with the computer operating system. Built using the C programming language, it allows the user to access and command operating system functions through human readable commands. Hosting a number of internally implemented system commands, myshell is sh-compatable with other sh-based shells such as `bash` and `zsh`. 
+Cshell is a command line interface  through which a user may interface with the computer operating system. Built using the C programming language, it allows the user to access and command operating system functions through human readable commands. Hosting a number of internally implemented system commands, cshell is sh-compatable with other sh-based shells such as `bash` and `zsh`. 
 
 
 ## Makefile and Compilation
 
 
 ### Overview
-Written in the C programming language, the myshell project must be first compiled before it can be executed. To manage this, a number of makefiles are included with this project. Located throughout the project, the primary makefile resides in the `/bin` directory. All other makefiles as such, are simply just for ease of use, passing commands back to the primary makefile for execution. In total, there are 3 makefiles attached with this project, located in: 
+Written in the C programming language, the cshell project must be first compiled before it can be executed. To manage this, a number of makefiles are included with this project. Located throughout the project, the primary makefile resides in the `/bin` directory. All other makefiles as such, are simply just for ease of use, passing commands back to the primary makefile for execution. In total, there are 3 makefiles attached with this project, located in: 
 - `/` project root
 - `/bin` directory
 - `/src` directory
@@ -26,38 +26,42 @@ make build
 The makefiles come with 3 commands which the user may invoke:
 
 - ### build (default)
-   The `build` command is the default command which the makefile will execute when invoked. Tasked with compiling and linking all the necessary source files, it creates the executable for the myshell shell, and places it inside the `/bin` directory. As the default command, the user can also invoke this command through just invoking `make`. This shortcut executes the default command of a makefile.
+   The `build` command is the default command which the makefile will execute when invoked. Tasked with compiling and linking all the necessary source files, it creates the executable for the cshell shell, and places it inside the `/bin` directory. As the default command, the user can also invoke this command through just invoking `make`. This shortcut executes the default command of a makefile.
 
 
 - ### run
-   The `run` command executes everything that the `build` command executes, with the addition that once compilation has finished, it will automatically start the myshell shell. 
+   The `run` command executes everything that the `build` command executes, with the addition that once compilation has finished, it will automatically start the cshell shell. 
 
 
 - ### clean
-   The `clean` command deletes the myshell executable, along with any compilation generated files.
+   The `clean` command deletes the cshell executable, along with any compilation generated files.
 
 
-## Myshell Usage Guide
+## Cshell Usage Guide
 
 
-### Myshell Invocation
+### Cshell Invocation
 ```
-myshell [batchfile]
+cshell [batchfile]
 ```
 
-When invoked without suppling an argument, myshell will execute in prompt mode. Prompt mode is an interactive interface, through which the user may interact and invoke system commands.
+When invoked without suppling an argument, cshell will execute in prompt mode. Prompt mode is an interactive interface, through which the user may interact and invoke system commands.
 
-When invoked with an argument, myshell will execute in batch mode. When it batch mode, myshell expects the supplied argument to be the filename to a batchfile. Myshell will read this file, and execute commands from this file. Once myshell has finished execution of all commands, myshell will close.
+When invoked with an argument, cshell will execute in batch mode. When it batch mode, cshell expects the supplied argument to be the filename to a batchfile. Cshell will read this file, and execute commands from this file. Once cshell has finished execution of all commands, cshell will close.
 
 
 ### Prompt Mode User Usage Guide
-Once started, myshell will display a prompt and wait for user input into the shell. Key to giving the user situational awareness, the prompt also displays a number of variables to the user. Mirroring the `bash` shell prompt, the user’s username, host machine, and current working directory are displayed. The username simply refers to the user’s username, the host machine refers to the system name of the current machine, and the current working directory refers to the directory in which the user is currently located. This prompt follows the syntax: 
+Once started, cshell will display a prompt and wait for user input into the shell. Key to giving the user situational awareness, the prompt also displays a number of variables to the user. Mirroring the `bash` shell prompt, the user’s username, host machine, and current working directory are displayed. The username simply refers to the user’s username, the host machine refers to the system name of the current machine, and the current working directory refers to the directory in which the user is currently located. This prompt follows the syntax: 
 
 ```
 username@hostmachine:CurrentWorkingDirectory$
 ```
 
-When a command is entered into the shell, the command is parsed and validated by myshell. Validation checks include IO redirection and background execution checks. For details, refer to *IO redirection*, *Background Execution* respectively. Following command validation, the command is first checked against the internally implemented commands of myshell. If it is an internal command, the subsequent internal command is executed. If the command invoked is not internally implemented by myshell, the command is passed to the parent shell for execution.  After command execution, the shell will once again prompt the user input. 
+When a command is entered into the shell, the command is parsed and validated by cshell. Validation checks include IO redirection and background execution checks. 
+
+For details, refer to *IO redirection*, *Background Execution* respectively. 
+
+Following command validation, the command is first checked against the internally implemented commands of cshell. If it is an internal command, the subsequent internal command is executed. If the command invoked is not internally implemented by cshell, the command is passed to the parent shell for execution.  After command execution, the shell will once again prompt the user input. 
 
 For details relating shell internal commands, refer to *Internal Commands.*
 
@@ -75,7 +79,7 @@ Key:
 ```
 
 - ### `quit`
-   Quits and closes myshell.
+   Quits and closes cshell.
 
    Extra operations supported: None
 
@@ -153,7 +157,7 @@ Key:
 
 
 ## External Commands
-Myshell allows for the execution of external commands. If a specific command is not listed within the *Internal Commands* section, then they are deemed and external commands. Commands such as program execution are therefore supported by Myshell. Full STDIN / STDOUT redirection is also supported with external commands. Note: Interpreters such as `python3` may not be invoked into background execution.
+Cshell allows for the execution of external commands. If a specific command is not listed within the *Internal Commands* section, then they are deemed external commands. Commands such as program execution are therefore supported by cshell. Full STDIN / STDOUT redirection is also supported with external commands. Note: Interpreters such as `python3` may not be invoked with background execution.
 
 Extra operations supported: Background Execution, IO Redirection, SIGINT Handling
 
@@ -163,12 +167,10 @@ For details, refer to *Background Execution*, *IO Redirection*, *Signal Handling
 ## IO Redirection
 
 ### Overview
-Myshell supports both STDIN and STDOUT redirection for external commands and internal commands. IO redirection refers to the redirection of input or output to a medium other than the command line interface. Specifically, this allows a command or program to receive its input from a source other than user input, and output to a location other than the command line. When executing commands such as `dir` for example, the output may be STDOUT redirected to a txt file, from which the information may easily be viewed again at a later stage. A similar process occurs with STDIN redirection, where command or program input is received from a specified file. 
-
-Myshell supports 2 forms of STDOUT redirection, truncation and append. STDOUT truncation will output to a destination, overwriting any existing data. STDOUT append will output to a destination, but will append the data to any already existing data.
+Cshell supports both STDIN and STDOUT redirection for external commands and internal commands. Cshell supports 2 forms of STDOUT redirection, truncation and append. STDOUT truncation will output to a destination, overwriting any existing data. STDOUT append will output to a destination, but will append the data to any already existing data.
 
 ### Invocation
-In Myshell, STDIN redirection is invoked by the `<` character, followed by the input file, separated by a whitespace character.
+In cshell, STDIN redirection is invoked by the `<` character, followed by the input file, separated by a whitespace character.
 
 Example:
 ```
@@ -195,7 +197,7 @@ If IO redirection is invoked and does not match this syntax, an error is raised 
 
 
 ### Implementation
-Myshell implements STDIN and STDOUT redirection through pointers and the `dup2()` system call. For details, refer to [[2]], [[3]] in *References*.
+Cshell implements STDIN and STDOUT redirection through pointers and the `dup2()` system call. For details, refer to [[2]], [[3]] in *References*.
 
 ## Environments
 Environment variables are a set of dynamic variables, shared throughout a computer operating system. These global variables can be accessed by any program through interfacing with the operating system shell, and therefore may affect their execution. Example environment variables which are useful to programs may be the `PWD` variable, containing the value of the current directory, or more importantly the `PATH` variable, containing all the directories which are in the operating system path. This is important as an operating system’s path variable states the directories in which it will search for executables upon program invocation. As such, only programs located within the directories stated by the `PATH` variable can be executed.
@@ -220,7 +222,7 @@ For further details, refer to [[5]] in *References.*
 ## Background Execution
 
 ### Overview
-Background execution refers to the execution of commands and programs in a background process, while the main process may continue to serve another user in the foreground. From the perspective of a user, this may come in the form of running a program in the background, while the user continues to interact with the shell in the foreground. Overall however, background execution is the basis of multiprocessing. Given the limited number of processors in a computer, a computer without the ability to handle multiprocessing would be very limited in the number of programs which it can simultaneously handle. Within the command line interface of myshell however, background execution is commonly used to run programs in the background, while the user continues to use and interact with the shell in the foreground. Outside of the command line interface, background execution may also come in the form of a user running multiple applications such as internet browsers concurrently.
+Background execution refers to the execution of commands and programs in a background process, while the main process may continue to serve another user in the foreground. From the perspective of a user, this may come in the form of running a program in the background, while the user continues to interact with the shell in the foreground. Overall however, background execution is the basis of multiprocessing. Given the limited number of processors in a computer, a computer without the ability to handle multiprocessing would be very limited in the number of programs which it can simultaneously handle. Within the command line interface of cshell however, background execution is commonly used to run programs in the background, while the user continues to use and interact with the shell in the foreground. Outside of the command line interface, background execution may also come in the form of a user running multiple applications such as internet browsers concurrently.
 
 For details with processes, refer to *Processes*
 
@@ -235,7 +237,7 @@ Example:
 
 
 ### Implementation
-Myshell utilises the `fork()` system call to manage background execution. 
+Cshell utilises the `fork()` system call to manage background execution. 
 
 For details, refer to [[6]] in *References.*
 
@@ -243,12 +245,12 @@ For details, refer to [[6]] in *References.*
 ## Signal Handling
 
 ### Overview
-When a user raises a keyboard interrupt `(SIGINT)` with `ctrl+c` in myshell, the `SIGINT` is handled by myshell’s custom signal handler. Within operating systems, signals are messages within the operating system which are passed between processes notifying some event occurring. Specifically with keyboard interrupts, it instructs the operating system to stop a specific process running. In myshell, keyboard interrupts can be used to stop a running foreground process. When a signal interrupt is raised with a running foreground process, the process is stopped, and the user is returned to the shell prompt. Keyboard interrupts do not affect processes running in the background. When a command line interpreter like `python3` is invoked in myshell, keyboard interrupts are passed into the called interpreter. 
+When a user raises a keyboard interrupt `(SIGINT)` with `ctrl+c` in cshell, the `SIGINT` is handled by cshell’s custom signal handler. Within operating systems, signals are messages within the operating system which are passed between processes notifying some event occurring. Specifically with keyboard interrupts, it instructs the operating system to stop a specific process running. In cshell, keyboard interrupts can be used to stop a running foreground process. When a signal interrupt is raised with a running foreground process, the process is stopped, and the user is returned to the shell prompt. Keyboard interrupts do not affect processes running in the background. When a command line interpreter like `python3` is invoked in cshell, keyboard interrupts are passed into the called interpreter. 
 
 For details regarding processes, refer to *Processes*
 
 ### Implementation
-Myshell utilises code obtained from [7]. For details, refer to *References.*
+Cshell utilises code obtained from [7]. For details, refer to *References.*
 
 
 ## References
@@ -274,11 +276,3 @@ Myshell utilises code obtained from [7]. For details, refer to *References.*
 [4]: <https://pubs.opengroup.org/onlinepubs/7908799/xbd/envvar.html>
 [5]: <https://learning.oreilly.com/library/view/Operating+System+Concepts,+8th+Edition/9780470128725/silb_9780470128725_oeb_c03_r1.html#h1>
 [6]: <https://man7.org/linux/man-pages/man2/fork.2.html>
-
-
-## ***REMOVED***
-
-***REMOVED***
-
-***REMOVED***
-***REMOVED***

@@ -1,13 +1,4 @@
 
-/*----------------------------------
-***REMOVED***
-
-***REMOVED***
-
-***REMOVED***
-***REMOVED***
------------------------------------*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -36,7 +27,7 @@ int help(char* outFile, int out, bool detached, int* killPID) {
          maskSIGINT();
       }
 
-      // Ternayr operator: choose between either stdout/redirection operation
+      // Ternary operator: choose between either stdout/redirection operation
       int ret = (out == 0 ? promptHelp(): helpRedirect(outFile, out));
       if (ret) {
          // If error raised
@@ -94,7 +85,7 @@ int helpRedirect(char* outFile, int out) {
 }
 
 void getHelpPath(char* fName) {
-   char relativePath[] = "/manual/readme";
+   char relativePath[] = "/manual/manual.md";
    char* path = strdup(getenv("SHELL"));
    path = realloc(path, (strlen(path) + 20) * sizeof(char));
 
