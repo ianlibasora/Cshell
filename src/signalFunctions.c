@@ -1,13 +1,4 @@
 
-/*----------------------------------
-STATEMENT OF NON-PLAGIARISM
-
-I hereby declare that all information in this assignment has been obtained and presented in accordance with academic rules and ethical conduct and the work I am submitting in this document, except where I have indicated, is my own work.
-
-Student Number: 19307361
-Student Name: Joseph Libasora
------------------------------------*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -22,8 +13,6 @@ Student Name: Joseph Libasora
 // Code snippet from: Randal E. Bryant, David R. O’Hallaron - Computer Systems. A Programmer’s Perspective [3rd ed.] (2016, Pearson)
 // Pg 801, fig 8.38
 // Code contains minor modifications to fit the purpose of a shell signal handler
-// Line 30 function definition modified to comply with types
-// Line 38 modfied to be async-signal safe
 
 sigjmp_buf buf;
 

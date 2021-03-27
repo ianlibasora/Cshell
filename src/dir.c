@@ -1,13 +1,4 @@
 
-/*----------------------------------
-STATEMENT OF NON-PLAGIARISM
-
-I hereby declare that all information in this assignment has been obtained and presented in accordance with academic rules and ethical conduct and the work I am submitting in this document, except where I have indicated, is my own work.
-
-Student Number: 19307361
-Student Name: Joseph Libasora
------------------------------------*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -65,7 +56,6 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID
 int ls(char* path) {
    // ---------- REFERENCE BLOCK ---------
    // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
-   // With minor style modifications to line(s) 70, 72, 78
 
    DIR *dPtr = opendir(path);
    struct dirent *dir;
@@ -91,7 +81,6 @@ int lsRedirected(char* path, char* outFile, int out) {
    if (fPtr != NULL) {
       // ---------- REFERENCE BLOCK ---------
       // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
-      // With minor style modifications to line(s) 96, 98, 104
 
       DIR *dPtr = opendir(path);
       struct dirent *dir;
