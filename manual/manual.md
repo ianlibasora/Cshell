@@ -85,7 +85,7 @@ Key:
 
 
 - ### `cd [directory]`
-   The `cd` command changes the current working directory of the shell. When invoked, the shell will attempt to change directory into `[directory]`. Upon completion of the `cd` command, the shell prompt and system `PWD` variable will update to reflect this change. If the supplied new directory is deemed invalid, an error is raised to the user. If no argument is supplied by the user, then `cd` simply just prints the current working directory of the shell. 
+   The `cd` command changes the current working directory of the shell. When invoked, the shell will attempt to change directory into `[directory]`. Upon completion of the `cd` command, the shell prompt and system `PWD` variable will update to reflect this change. If the supplied new directory is deemed invalid, an error is raised to the user. If no argument is supplied by the user, then `cd` will change directory into the user's home directory.
 
    Extra operations supported: Background Execution, SIGINT Handling
    
