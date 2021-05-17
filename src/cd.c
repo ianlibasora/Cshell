@@ -14,7 +14,7 @@
 int cd(int lgt, char** inp, bool detached) {
    if (lgt == 1) {
       // If only `cd` is invoked
-      printf("%s\n", getenv("PWD"));
+      changeDir(getenv("HOME"));
       return 0;
    }
 
