@@ -5,60 +5,61 @@
 #include <string.h>
 
 #include "redirects.h"
+#include "cmd.h"
 
 // Shell redirection/detach functions
 
-int checkRedirection(int lgt, char** lst, bool* in, int* out) {
+int checkRedirection(CMD* cmd) {
    // Check args if redirection is required
    // Return 0 on sucess
-   for (int i=0; i < lgt; ++i) {
-      if (!strcmp(lst[i], "<")) {
-         *in = true;
-      } else if (!strcmp(lst[i], ">")) {
-         if (*out != 0) {
+   for (int i=0; i < cmd->lgt; ++i) {
+      if (!strcmp(cmd->args[i], "<")) {
+         if (cmd->in) {
+            fprintf(stderr, "Error. Multiple use of \"<\" redirection\n");
+            return 3;
+         }
+         cmd->in = true;
+      } else if (!strcmp(cmd->args[i], ">")) {
+         if (cmd->out != 0) {
             fprintf(stderr, "Error. Mixed use of \">\" and \">>\" redirection\n");
             return 1;
-         } else {
-            *out = 1;
          }
-      } else if (!strcmp(lst[i], ">>")) {
-         if (*out != 0) {
+         cmd->out = 1;
+      } else if (!strcmp(cmd->args[i], ">>")) {
+         if (cmd->out != 0) {
             fprintf(stderr, "Error. Mixed use of \">\" and \">>\" redirection\n");
             return 2;
-         } else {
-            *out = 2;
          }
+         cmd->out = 2;
       }
    }
    return 0;
 }
 
-int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool detached) {
+int getRedirectionFile(CMD* cmd) {
    // Get the filenames for stdin/stdout redirection
    // Return 0 on sucess
    bool in, out;
    in = out = false;
 
-   for (int i=0; i < lgt; ++i) {
-      if (!in && !strcmp(lst[i], "<")) {
+   for (int i=0; i < cmd->lgt; ++i) {
+      if (!in && !strcmp(cmd->args[i], "<")) {
          // If < detected
          // Check for correct arg
-         if (i + 1 >= lgt || !strcmp(lst[i + 1], "&") || !strcmp(lst[i + 1], "<") || !strcmp(lst[i + 1], ">") || !strcmp(lst[i + 1], ">>")) {
+         if (i + 1 >= cmd->lgt || !strcmp(cmd->args[i + 1], "&") || !strcmp(cmd->args[i + 1], "<") || !strcmp(cmd->args[i + 1], ">") || !strcmp(cmd->args[i + 1], ">>")) {
             fprintf(stderr, "Error. Incorrect arguments for redirection\n");
             return 1;
-         } else {
-            strcpy(inFile, lst[i + 1]);
          }
+         strcpy(cmd->inFile, cmd->args[i + 1]);
          in = true;
-      } else if (!out && (!strcmp(lst[i], ">") || !strcmp(lst[i], ">>"))) {
+      } else if (!out && (!strcmp(cmd->args[i], ">") || !strcmp(cmd->args[i], ">>"))) {
          // if > or >> detected
          // Check for correct args
-         if (i + 1 >= lgt || !strcmp(lst[i + 1], "&") || !strcmp(lst[i + 1], "<") || !strcmp(lst[i + 1], ">") || !strcmp(lst[i + 1], ">>")) {
+         if (i + 1 >= cmd->lgt || !strcmp(cmd->args[i + 1], "&") || !strcmp(cmd->args[i + 1], "<") || !strcmp(cmd->args[i + 1], ">") || !strcmp(cmd->args[i + 1], ">>")) {
             fprintf(stderr, "Error. Incorrect arguments for redirection\n");
             return 2;
-         } else {
-            strcpy(outFile, lst[i + 1]);
          }
+         strcpy(cmd->outFile, cmd->args[i + 1]);
          out = true;
       }
    }

@@ -6,6 +6,7 @@
 
 #include "cmd.h"
 #include "input.h"
+#include "redirects.h"
 
 // Functions for CMD structure handling
 
@@ -14,12 +15,11 @@ int parseCMD(char* inp, CMD* cmd) {
       // If error, restart loop
       return 1;
    }
-   if (splitString(inp, cmd) != 0) {
+   if (splitString(inp, cmd) != 0 || checkRedirection(cmd) != 0 || getRedirectionFile(cmd) != 0) {
       // If error, restart loop
       return 2;
    }
    checkDetached(cmd);
-   
    return 0;
 }
 
@@ -30,6 +30,7 @@ void cleanCMD(CMD* cmd) {
    cmd->lgt = 0;
    cmd->in = false;
    strcpy(cmd->inFile, "");
+   cmd->out = 0;
    strcpy(cmd->outFile, "");
    cmd->pid = 0;
 }
