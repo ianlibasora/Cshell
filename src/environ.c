@@ -9,40 +9,55 @@
 #include "commands.h"
 #include "enviroments.h"
 #include "sigFunctions.h"
+#include "cmd.h"
 
 // environ command, display all environment variables
 
-int listENV(char* outFile, int out, bool detached) {
-   pid_t pid = fork();
-   if (pid == 0) {
-      // Child
-      setShellENV("PARENT", getenv("SHELL"));
-      extern char** environ;// Exposes environment variables
-
-      if (detached) {
-         // If detached, mask SIGINT
+int listENV(CMD* cmd) {
+   if (cmd->detached) {
+      // Detached
+      pid_t pid = fork();
+      if (pid == 0) {
+         // Child
+         setShellENV("PARENT", getenv("SHELL"));
+         extern char** environ;// Exposes environment variables
          maskSIGINT();
-      }
 
-      if (out == 0) {
+         if (cmd->out == 0) {
+            // Run no redirection
+            for (int i=0; environ[i]; ++i) {
+               printf("%s\n", environ[i]);
+            }
+         } else {
+            // Run redirection
+            if (listENVRedirect(environ, cmd->outFile, cmd->out)) {
+               // If error raised
+               _exit(2);
+            }
+         }
+         _exit(0);
+      } else if (pid == -1) {
+         fprintf(stderr, "Error. Fork error occured\n");
+         _exit(1);
+      }
+      // Parent does nothing
+      // Waiting/detachment handled by main
+   } else {
+      // Non-Detached
+      extern char** environ;// Exposes environment variables
+      if (cmd->out == 0) {
          // Run no redirection
          for (int i=0; environ[i]; ++i) {
             printf("%s\n", environ[i]);
          }
       } else {
          // Run redirection
-         if (listENVRedirect(environ, outFile, out)) {
+         if (listENVRedirect(environ, cmd->outFile, cmd->out)) {
             // If error raised
-            _exit(2);
+            return 2;
          }
       }
-      _exit(0);
-   } else if (pid == -1) {
-      fprintf(stderr, "Error. Fork error occured\n");
-      _exit(1);
    }
-   // Parent does nothing
-   // Waiting/detachment handled by main
    return 0;
 }
 
