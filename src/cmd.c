@@ -33,6 +33,7 @@ void cleanCMD(CMD* cmd) {
    cmd->out = 0;
    strcpy(cmd->outFile, "");
    cmd->pid = 0;
+   cmd->detached = false;
 }
 
 void checkDetached(CMD* cmd) {
