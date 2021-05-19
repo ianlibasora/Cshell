@@ -8,17 +8,18 @@
 #include "commands.h"
 #include "enviroments.h"
 #include "sigFunctions.h"
+#include "cmd.h"
 
 // cd command
 
-int cd(int lgt, char** inp, bool detached) {
-   if (lgt == 1) {
+int cd(CMD* cmd) {
+   if (cmd->lgt == 1) {
       // If only `cd` is invoked
       changeDir(getenv("HOME"));
       return 0;
    }
 
-   if (detached) {
+   if (cmd->detached) {
       pid_t pid = fork();
       if (pid == 0) {
          // Child
@@ -27,11 +28,11 @@ int cd(int lgt, char** inp, bool detached) {
          // If detached, mask SIGINT
          maskSIGINT();
 
-         if (lgt == 2) {
+         if (cmd->lgt == 2) {
             // Case: `cd &`
             printf("%s\n", getenv("PWD"));
          } else {
-            changeDir(inp[1]);
+            changeDir(cmd->args[1]);
          }
          _exit(0);
       } else if (pid == -1) {
@@ -40,7 +41,7 @@ int cd(int lgt, char** inp, bool detached) {
       }
       // Parent does nothing
    } else {
-      changeDir(inp[1]);
+      changeDir(cmd->args[1]);
    }
    return 0;
 }

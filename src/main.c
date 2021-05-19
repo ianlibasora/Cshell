@@ -100,12 +100,6 @@ int main(int argc, char* argv[]) {
       if (feof(stdin)) {
          break;
       }
-
-      if (checkInvalidString(inp)) {
-         // Skip and restart loop if invalid string
-         continue;
-      }
-
       if (parseCMD(inp, &cmd) != 0) {
          cleanCMD(&cmd);
          continue;
@@ -115,12 +109,49 @@ int main(int argc, char* argv[]) {
          printf("%s\n", cmd.args[i]);
       }
 
-      cleanCMD(&cmd);
-
-      for (int i=0; i < cmd.lgt; ++i) {
-         printf("%s\n", cmd.args[i]);
+      // Non-Always children commands
+      if (!strcmp(cmd.args[0], "quit")) {
+         break;
+      } else if (!strcmp(cmd.args[0], "cd")) {
+         cd(&cmd);
+      } else if (!strcmp(cmd.args[0], "clr")) {
+         system("clear");
       }
 
+      // // Always children commands
+      // else if (!strcmp(inpArgs[0], "environ")) {
+      //    active = true;
+      //    listENV(outFile, out, detached);
+      // } else if (!strcmp(inpArgs[0], "dir")) {
+      //    active = true;
+      //    dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "echo")) {
+      //    active = true;
+      //    echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "pause")) {
+      //    active = true;
+      //    pauseShell(detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "help")) {
+      //    active = true;
+      //    help(outFile, out, detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "rename")) {
+      //    active = true;
+      //    chName(inpArgc, inpArgs, detached, &killPID);
+      // } else {
+      //    active = true;
+      //    fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
+      // }
+
+      if (!cmd.detached) {
+         // If not detached
+         wait(NULL);
+      }
+      // active = false;
+
+
+      cleanCMD(&cmd);
+
+      // ======= LEGACY CODE ================
       // // Split string into array of args
       // if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
       //    // Error handle invalid args
