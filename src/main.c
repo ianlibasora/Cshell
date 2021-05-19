@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <setjmp.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 
 #include "functions.h"// Shell operation functions
 #include "commands.h"// Shell commands
@@ -38,11 +39,19 @@ int main(int argc, char* argv[]) {
    setenv("PWD", cwd, 1);// Ensure that cwd is initialised properly
    setExePath();// Assign the absolute path to the shell executable
 
-   // Shell input handling
+   // ------ Shell signal handling ------
+   // When shell enters a command execution section, signal handling becomes active
+   // If a SIGINT were to be raised, the signal handler will reset the loop, and kill the child process
+   // Only used for commands `Always Children`
+   // Note: will not kill detached processes due to the `active` flag being false
+   bool active = false;// Bool to state if command execution in progress
+   pid_t killPID;// PID of active process
+
+   // ------ Shell command handling ------
    char* inp;// Input string pointer
    CMD cmd;
    cmd.lgt = 0;
-   cleanCMD(&cmd);
+   cleanCMD(&cmd, &killPID);
 
    // char* inpArgs[MAXARGS];// Array of strings (array of pointers)
    // int inpArgc = 0;// Length of `inpArgs`
@@ -61,16 +70,6 @@ int main(int argc, char* argv[]) {
    // bool in = false;// Bool to state stdin redirection
    // int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
 
-
-   // Shell signal handling
-   // When shell enters a command execution section, signal handling becomes active
-   // If a SIGINT were to be raised, the signal handler will reset the loop, and kill the child process
-   // Only used for commands `Always Children`
-   // Note: will not kill detached processes due to the `active` flag being false
-
-   bool active = false;// Bool to state if command execution in progress
-   // int killPID;// Pid of active process
-
    bool run = true;
    while (run) {
       // ---------- REFERENCE BLOCK ---------
@@ -82,17 +81,14 @@ int main(int argc, char* argv[]) {
       if (!sigsetjmp(buf, 1)) {
          Signal(SIGINT, handler);
       } else {
-         // If SIGINT triggers, cleanup shell before new prompt
-         // clearArgs(inpArgc, inpArgs);
-         // cleanRedirectFiles(inFile, outFile);
-         // detached = in = out = inpArgc = 0;
-
          // Additional signal handling for (non-detached) child process SIGINT
          // Kills the unreapable process from SIGINT
-         if (active) {
-            kill(cmd.pid, SIGTERM);
+         if (active && killPID != 0) {
+            kill(killPID, SIGTERM);
          }
          active = false;
+         // If SIGINT triggers, cleanup shell before new prompt
+         cleanCMD(&cmd, &killPID);
       }
       // ---------- END BLOCK ---------
 
@@ -102,7 +98,7 @@ int main(int argc, char* argv[]) {
          break;
       }
       if (parseCMD(inp, &cmd) != 0) {
-         cleanCMD(&cmd);
+         cleanCMD(&cmd, &killPID);
          continue;
       }
 
@@ -121,10 +117,11 @@ int main(int argc, char* argv[]) {
          listENV(&cmd);
       } 
       // Always children commands
-      // else if (!strcmp(inpArgs[0], "dir")) {
-      //    active = true;
-      //    dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "echo")) {
+      else if (!strcmp(cmd.args[0], "dir")) {
+         active = true;
+         dir(&cmd, &killPID);
+      }
+      // else if (!strcmp(inpArgs[0], "echo")) {
       //    active = true;
       //    echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
       // } else if (!strcmp(inpArgs[0], "pause")) {
@@ -145,10 +142,8 @@ int main(int argc, char* argv[]) {
          // If not detached
          wait(NULL);
       }
-      // active = false;
-
-
-      cleanCMD(&cmd);
+      active = false;
+      cleanCMD(&cmd, &killPID);
 
       // ======= LEGACY CODE ================
       // // Split string into array of args

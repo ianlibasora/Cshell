@@ -9,7 +9,6 @@
 #include "commands.h"
 #include "enviroments.h"
 #include "sigFunctions.h"
-#include "cmd.h"
 
 // environ command, display all environment variables
 

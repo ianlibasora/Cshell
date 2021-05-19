@@ -21,7 +21,7 @@ int listENV(CMD* cmd);
 int listENVRedirect(char** envs, char* outFile, int out);
 
 // dir
-int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID);
+int dir(CMD* cmd, pid_t* killPID);
 int ls(char* path);
 int lsRedirected(char* path, char* outFile, int out);
 
