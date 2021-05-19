@@ -125,11 +125,11 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(cmd.args[0], "help")) {
          active = true;
          help(&cmd, &killPID);
+      } else if (!strcmp(cmd.args[0], "rename")) {
+         active = true;
+         chName(&cmd, &killPID);
       } 
-      // else if (!strcmp(inpArgs[0], "rename")) {
-      //    active = true;
-      //    chName(inpArgc, inpArgs, detached, &killPID);
-      // } else {
+      // else {
       //    active = true;
       //    fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
       // }
