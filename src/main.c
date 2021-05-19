@@ -102,10 +102,6 @@ int main(int argc, char* argv[]) {
          continue;
       }
 
-      for (int i=0; i < cmd.lgt; ++i) {
-         printf("%s\n", cmd.args[i]);
-      }
-
       // Non-Always children commands
       if (!strcmp(cmd.args[0], "quit")) {
          break;
@@ -120,11 +116,11 @@ int main(int argc, char* argv[]) {
       else if (!strcmp(cmd.args[0], "dir")) {
          active = true;
          dir(&cmd, &killPID);
-      }
-      // else if (!strcmp(inpArgs[0], "echo")) {
-      //    active = true;
-      //    echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "pause")) {
+      } else if (!strcmp(cmd.args[0], "echo")) {
+         active = true;
+         echo(&cmd, &killPID);
+      } 
+      // else if (!strcmp(inpArgs[0], "pause")) {
       //    active = true;
       //    pauseShell(detached, &killPID);
       // } else if (!strcmp(inpArgs[0], "help")) {
