@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
    // Only used for commands `Always Children`
    // Note: will not kill detached processes due to the `active` flag being false
 
-   // bool active = false;// Bool to state if command execution in progress
+   bool active = false;// Bool to state if command execution in progress
    // int killPID;// Pid of active process
 
    bool run = true;
@@ -89,10 +89,10 @@ int main(int argc, char* argv[]) {
 
          // Additional signal handling for (non-detached) child process SIGINT
          // Kills the unreapable process from SIGINT
-         // if (active) {
-         //    kill(killPID, SIGTERM);
-         // }
-         // active = false;
+         if (active) {
+            kill(cmd.pid, SIGTERM);
+         }
+         active = false;
       }
       // ---------- END BLOCK ---------
 
@@ -117,13 +117,11 @@ int main(int argc, char* argv[]) {
          cd(&cmd);
       } else if (!strcmp(cmd.args[0], "clr")) {
          system("clear");
-      }
-
-      // // Always children commands
-      // else if (!strcmp(inpArgs[0], "environ")) {
-      //    active = true;
-      //    listENV(outFile, out, detached);
-      // } else if (!strcmp(inpArgs[0], "dir")) {
+      } else if (!strcmp(cmd.args[0], "environ")) {
+         listENV(&cmd);
+      } 
+      // Always children commands
+      // else if (!strcmp(inpArgs[0], "dir")) {
       //    active = true;
       //    dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
       // } else if (!strcmp(inpArgs[0], "echo")) {

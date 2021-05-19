@@ -17,7 +17,7 @@ int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPI
 int echoRedirect(int lgt, char** lst, char* outFile, int out);
 
 // environ
-int listENV(char* outFile, int out, bool detached);
+int listENV(CMD* cmd);
 int listENVRedirect(char** envs, char* outFile, int out);
 
 // dir
