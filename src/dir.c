@@ -11,7 +11,7 @@
 #include "enviroments.h"
 #include "sigFunctions.h"
 
-#define MAXPATH 200
+#define MAXPATH 250
 
 // dir command, list contents of directory
 
