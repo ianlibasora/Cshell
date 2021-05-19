@@ -106,8 +106,17 @@ int main(int argc, char* argv[]) {
       }
 
       if (parseCMD(inp, &cmd) != 0) {
+         cleanCMD(&cmd);
          continue;
       }
+
+
+
+      for (int i=0; i < cmd.lgt; ++i) {
+         printf("%s\n", cmd.args[i]);
+      }
+
+      cleanCMD(&cmd);
 
       for (int i=0; i < cmd.lgt; ++i) {
          printf("%s\n", cmd.args[i]);
