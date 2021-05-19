@@ -11,7 +11,7 @@
 
 // Pause command, sleep till `enter` key from user
 
-int pauseShell(bool detached, int* killPID) {
+int pauseShell(CMD* cmd, pid_t* killPID) {
    // Hold until the user presses `enter`
    // Uses the getpass() to stop input echo
    pid_t pid = fork();
@@ -20,7 +20,7 @@ int pauseShell(bool detached, int* killPID) {
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
 
-      if (detached) {
+      if (cmd->detached) {
          // If detached, mask SIGINT
          maskSIGINT();
       }

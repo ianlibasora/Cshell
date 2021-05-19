@@ -119,14 +119,14 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(cmd.args[0], "echo")) {
          active = true;
          echo(&cmd, &killPID);
+      } else if (!strcmp(cmd.args[0], "pause")) {
+         active = true;
+         pauseShell(&cmd, &killPID);
+      } else if (!strcmp(cmd.args[0], "help")) {
+         active = true;
+         help(&cmd, &killPID);
       } 
-      // else if (!strcmp(inpArgs[0], "pause")) {
-      //    active = true;
-      //    pauseShell(detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "help")) {
-      //    active = true;
-      //    help(outFile, out, detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "rename")) {
+      // else if (!strcmp(inpArgs[0], "rename")) {
       //    active = true;
       //    chName(inpArgc, inpArgs, detached, &killPID);
       // } else {
