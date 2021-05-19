@@ -1,13 +1,15 @@
 
 #include <stdbool.h>
 
+#include "cmd.h"
+
 // Headerfile for shell command functions
 
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
 // cd
-int cd(int lgt, char** inp, bool detached);
+int cd(CMD* cmd);
 void changeDir(char* path);
 
 // echo
