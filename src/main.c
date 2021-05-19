@@ -110,8 +110,6 @@ int main(int argc, char* argv[]) {
          continue;
       }
 
-
-
       for (int i=0; i < cmd.lgt; ++i) {
          printf("%s\n", cmd.args[i]);
       }

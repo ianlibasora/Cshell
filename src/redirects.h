@@ -9,6 +9,5 @@
 int checkRedirection(int lgt, char** lst, bool* in, int* out);
 int getRedirectionFile(int lgt, char** lst, char* inFile, char* outFile, bool detached);
 void cleanRedirectFiles(char* inFile, char* outFile);
-bool checkDetached(int lgt, char** lst);
 
 #endif

@@ -18,6 +18,7 @@ int parseCMD(char* inp, CMD* cmd) {
       // If error, restart loop
       return 2;
    }
+   checkDetached(cmd);
    
    return 0;
 }
@@ -31,4 +32,14 @@ void cleanCMD(CMD* cmd) {
    strcpy(cmd->inFile, "");
    strcpy(cmd->outFile, "");
    cmd->pid = 0;
+}
+
+void checkDetached(CMD* cmd) {
+   for (int i=0; i < cmd->lgt; ++i) {
+      if (!strcmp(cmd->args[i], "&")) {
+         cmd->detached = true;
+         return;
+      }
+   }
+   cmd->detached = false;
 }
