@@ -3,6 +3,9 @@
 
 // Headerfile for shell command functions
 
+#ifndef COMMANDS_H
+#define COMMANDS_H
+
 // cd
 int cd(int lgt, char** inp, bool detached);
 void changeDir(char* path);
@@ -35,3 +38,5 @@ void getHelpPath(char* fName);
 
 // rename
 int chName(int lgt, char** lst, bool detached, int* killPID);
+
+#endif
