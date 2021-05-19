@@ -65,19 +65,3 @@ int getRedirectionFile(CMD* cmd) {
    }
    return 0;
 }
-
-// void cleanRedirectFiles(char* inFile, char* outFile) {
-//    // Clean redirection files
-//    strcpy(inFile, "");
-//    strcpy(outFile, "");
-// }
-
-// bool checkDetached(int lgt, char** lst) {
-//    // Check args if running retached
-//    for (int i=0; i < lgt; ++i) {
-//       if (!strcmp(lst[i], "&")) {
-//          return true;
-//       }
-//    }
-//    return false;
-// }

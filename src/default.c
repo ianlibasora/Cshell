@@ -11,6 +11,7 @@
 #include "enviroments.h"
 #include "functions.h"
 #include "sigFunctions.h"
+#include "cmd.h"
 
 // Default fallback system call function when command is unknown
 

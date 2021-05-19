@@ -1,6 +1,4 @@
 
-#include <stdbool.h>
-
 #include "cmd.h"
 
 // Headerfile for shell redirection functions

@@ -6,7 +6,6 @@
 #include <ctype.h>
 #include <unistd.h>
 
-#include "functions.h"
 #include "input.h"
 #include "cmd.h"
 

@@ -1,7 +1,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -9,8 +8,8 @@
 #include "commands.h"
 #include "enviroments.h"
 #include "sigFunctions.h"
+#include "cmd.h"
 
-#define MAXLINE 500
 #define MAXPATH 250
 
 // Help command

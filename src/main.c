@@ -53,22 +53,11 @@ int main(int argc, char* argv[]) {
    cmd.lgt = 0;
    cleanCMD(&cmd, &killPID);
 
-   // char* inpArgs[MAXARGS];// Array of strings (array of pointers)
-   // int inpArgc = 0;// Length of `inpArgs`
-   // char inFile[MAXPATH];// Path of stdin redirection file
-   // char outFile[MAXPATH];// Path of stdout redirection file
-
-
-   // Shell redirection/detach handling
    // Note:
-   // All commands, excluding `quit`, `cd`, `clear` run as children of the parent process
+   // All commands, excluding `quit`, `cd`, `clear`, `environ` run as children of the parent process
    // These are refered to as `Non-Always` and `Always` children commands
    // Detachment is determined by if the parent process should wait for the child process
    // cd however is still able to be run detached
-
-   // bool detached = false;// Bool to state shell detachment
-   // bool in = false;// Bool to state stdin redirection
-   // int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
 
    bool run = true;
    while (run) {
@@ -92,11 +81,14 @@ int main(int argc, char* argv[]) {
       }
       // ---------- END BLOCK ---------
 
-      cleanChildren();// Clean any present zombie processes
-      inp = promptInput(prompt);// Prompts user for full complete string of user input
+      // Clean any zombie processes, prompt user for new input
+      cleanChildren();
+      inp = promptInput(prompt);
       if (feof(stdin)) {
          break;
       }
+
+      // Parse input into CMD struct
       if (parseCMD(inp, &cmd) != 0) {
          cleanCMD(&cmd, &killPID);
          continue;
@@ -139,74 +131,7 @@ int main(int argc, char* argv[]) {
       }
       active = false;
       cleanCMD(&cmd, &killPID);
-
-      // ======= LEGACY CODE ================
-      // // Split string into array of args
-      // if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
-      //    // Error handle invalid args
-      //    clearArgs(inpArgc, inpArgs);
-      //    detached = in = out = inpArgc = 0;
-      //    continue;
-      // }
-      // detached = checkDetached(inpArgc, inpArgs);// Check if running detached
-
-      // // Checks and validates redirection and finds files associated with redirection
-      // if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
-      //    // If the redirection handling fails, reset and restart the loop
-      //    clearArgs(inpArgc, inpArgs);
-      //    cleanRedirectFiles(inFile, outFile);
-      //    detached = in = out = inpArgc = 0;
-      //    continue;
-      // }
-
-
-      // // Non-Always children commands
-      // if (!strcmp(inpArgs[0], "quit")) {
-      //    break;
-      // } else if (!strcmp(inpArgs[0], "cd")) {
-      //    cd(inpArgc, inpArgs, detached);
-      //    detached = false;
-      // } else if (!strcmp(inpArgs[0], "clr")) {
-      //    system("clear");
-      //    detached = false;
-      // }
-      // // Always children commands
-      // else if (!strcmp(inpArgs[0], "environ")) {
-      //    active = true;
-      //    listENV(outFile, out, detached);
-      // } else if (!strcmp(inpArgs[0], "dir")) {
-      //    active = true;
-      //    dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "echo")) {
-      //    active = true;
-      //    echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "pause")) {
-      //    active = true;
-      //    pauseShell(detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "help")) {
-      //    active = true;
-      //    help(outFile, out, detached, &killPID);
-      // } else if (!strcmp(inpArgs[0], "rename")) {
-      //    active = true;
-      //    chName(inpArgc, inpArgs, detached, &killPID);
-      // } else {
-      //    active = true;
-      //    fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
-      // }
-
-      // if (!detached) {
-      //    // If not detached
-      //    wait(NULL);
-      // }
-      // active = false;
-
-
-      // // Loop restart cleanup
-      // clearArgs(inpArgc, inpArgs);
-      // cleanRedirectFiles(inFile, outFile);
-      // detached = in = out = inpArgc = 0;
    }
-
    printf("Quitting myshell\n");
    exit(0);
 }
