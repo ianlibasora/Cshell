@@ -1,7 +1,5 @@
 
-#include <stdbool.h>
-
-// Headerfile for functions handling shell operation (main.c)
+// Headerfile for functions handling shell operation
 
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H

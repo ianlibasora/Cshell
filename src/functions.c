@@ -1,9 +1,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <ctype.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -11,7 +8,7 @@
 #include "functions.h"
 #include "enviroments.h"
 
-// Functions for main.c shell operation
+// Functions for shell operation
 
 void clearArgs(int lgt, char** lst) {
    // Free memory allocated in array
