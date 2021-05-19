@@ -1,6 +1,5 @@
 
 #include <stdbool.h>
-#include <sys/types.h>
 
 // Headerfile for CMD structure
 
@@ -18,11 +17,10 @@ typedef struct CMD {
    int out;
    char outFile[CMDMAXPATH];
    bool detached;
-   pid_t pid;
 } CMD;
 
 int parseCMD(char* inp, CMD* cmd);
-void cleanCMD(CMD* cmd);
+void cleanCMD(CMD* cmd, pid_t* killPID);
 void checkDetached(CMD* cmd);
 
 #endif

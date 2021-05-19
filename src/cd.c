@@ -8,7 +8,6 @@
 #include "commands.h"
 #include "enviroments.h"
 #include "sigFunctions.h"
-#include "cmd.h"
 
 // cd command
 

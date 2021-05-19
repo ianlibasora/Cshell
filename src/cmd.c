@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <sys/types.h>
 
 #include "cmd.h"
 #include "input.h"
@@ -23,7 +24,7 @@ int parseCMD(char* inp, CMD* cmd) {
    return 0;
 }
 
-void cleanCMD(CMD* cmd) {
+void cleanCMD(CMD* cmd, pid_t* killPID) {
    for (int i=0; i < cmd->lgt; ++i) {
       free(cmd->args[i]);
    }
@@ -32,8 +33,8 @@ void cleanCMD(CMD* cmd) {
    strcpy(cmd->inFile, "");
    cmd->out = 0;
    strcpy(cmd->outFile, "");
-   cmd->pid = 0;
    cmd->detached = false;
+   *killPID = 0;
 }
 
 void checkDetached(CMD* cmd) {

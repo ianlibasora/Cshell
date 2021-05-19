@@ -15,15 +15,15 @@
 
 // dir command, list contents of directory
 
-int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID) {
+int dir(CMD* cmd, pid_t* killPID) {
    // Determine paths to directories
    char path[MAXPATH];
-   if (lgt == 1) {
+   if (cmd->lgt == 1) {
       strcpy(path, ".");
-   } else if (!strcmp(lst[1], "&") || !strcmp(lst[1], "<") || !strcmp(lst[1], ">") || !strcmp(lst[1], ">>")) {
+   } else if (!strcmp(cmd->args[1], "&") || !strcmp(cmd->args[1], "<") || !strcmp(cmd->args[1], ">") || !strcmp(cmd->args[1], ">>")) {
       strcpy(path, ".");
    } else {
-      strcpy(path, lst[1]);
+      strcpy(path, cmd->args[1]);
    }
 
    pid_t pid = fork();
@@ -32,13 +32,13 @@ int dir(int lgt, char** lst, char* outFile, int out, bool detached, int* killPID
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
 
-      if (detached) {
+      if (cmd->detached) {
          // If detached, mask SIGINT
          maskSIGINT();
       }
 
       // Ternary operator: Run either stdout or redirection
-      int ret = (out == 0 ? ls(path): lsRedirected(path, outFile, out));
+      int ret = (cmd->out == 0 ? ls(path): lsRedirected(path, cmd->outFile, cmd->out));
       if (ret) {
          // If error raised
          _exit(2);
