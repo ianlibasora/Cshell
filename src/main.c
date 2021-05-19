@@ -128,11 +128,10 @@ int main(int argc, char* argv[]) {
       } else if (!strcmp(cmd.args[0], "rename")) {
          active = true;
          chName(&cmd, &killPID);
-      } 
-      // else {
-      //    active = true;
-      //    fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
-      // }
+      } else {
+         active = true;
+         fallback(&cmd, &killPID);
+      }
 
       if (!cmd.detached) {
          // If not detached

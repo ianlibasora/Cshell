@@ -14,15 +14,15 @@
 
 // Default fallback system call function when command is unknown
 
-int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int out, bool detached, int* killPID) {
+int fallback(CMD* cmd, pid_t* killPID) {
    // Fork and execute non internal program detached
 
-   if (checkInterpreter(lgt, lst[0], detached)) {
+   if (checkInterpreter(cmd->lgt, cmd->args[0], cmd->detached)) {
       // If external command is to open an interpreter
       // Disable the custom signal handler
       // Signal handler gets restarted when the shell returns back to the prompt loop
 
-      if (detached) {
+      if (cmd->detached) {
          // Stop the user if interpreter is being run detached
          fprintf(stderr, "Warning. Cannot run an interpreter detached.\n");
          return 1;
@@ -36,57 +36,57 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
 
-      if (detached) {
+      if (cmd->detached) {
          // If detached, mask SIGINT
          maskSIGINT();
       }
 
       // Rm redirection/detachment related args
       // Can assume that handler has checked for invalid argument sequence
-      char* newCmd[lgt];
+      char* newCmd[cmd->lgt];
       int j = 0;// newCmd index
       // i = lst index
-      for (int i=0; i < lgt; ++i) {
-         if (!strcmp(lst[i], "<") || !strcmp(lst[i], ">") || !strcmp(lst[i], ">>")) {
+      for (int i=0; i < cmd->lgt; ++i) {
+         if (!strcmp(cmd->args[i], "<") || !strcmp(cmd->args[i], ">") || !strcmp(cmd->args[i], ">>")) {
             ++i;
             continue;
-         } else if (!strcmp(lst[i], "&")) {
+         } else if (!strcmp(cmd->args[i], "&")) {
             continue;
          }
-         newCmd[j] = calloc(strlen(lst[i]), sizeof(char));
-         strcpy(newCmd[j], lst[i]);
+         newCmd[j] = calloc(strlen(cmd->args[i]), sizeof(char));
+         strcpy(newCmd[j], cmd->args[i]);
          ++j;
       }
       // Set last index of newCmd to NULL
       newCmd[j] = NULL;
 
-      if (in) {
+      if (cmd->in) {
          // If stdin redirection active
-         FILE* stdinFile = fopen(inFile, "r");
+         FILE* stdinFile = fopen(cmd->inFile, "r");
 
          if (stdinFile == NULL) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
+            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->inFile);
             _exit(2);
          }
          if (dup2(fileno(stdinFile), 0) == -1) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", inFile);
+            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->inFile);
             _exit(2);
          }
          fclose(stdinFile);
       }
 
-      if (out != 0) {
+      if (cmd->out != 0) {
          // If stdout redirection active
          // Ternary operator choose between write/append
-         FILE* stdoutFile = fopen(outFile, (out == 1 ? "w": "a"));
+         FILE* stdoutFile = fopen(cmd->outFile, (cmd->out == 1 ? "w": "a"));
 
          if (stdoutFile == NULL) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->outFile);
             _exit(2);
          }
 
          if (dup2(fileno(stdoutFile), 1) == -1) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
+            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->outFile);
             _exit(2);
          }
          fclose(stdoutFile);
