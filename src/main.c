@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
    // Shell input handling
    char* inp;// Input string pointer
    CMD cmd;
+   cleanCMD(&cmd);
 
    // char* inpArgs[MAXARGS];// Array of strings (array of pointers)
    // int inpArgc = 0;// Length of `inpArgs`

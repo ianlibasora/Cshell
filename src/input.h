@@ -1,5 +1,6 @@
 
 #include <stdbool.h>
+
 #include "cmd.h"
 
 // Headerfile for input handler functions

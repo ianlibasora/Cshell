@@ -15,7 +15,7 @@ typedef struct CMD {
    char* args[CMDMAXARGS];
    bool in;
    char inFile[CMDMAXPATH];
-   bool out;
+   int out;
    char outFile[CMDMAXPATH];
    bool detached;
    pid_t pid;
