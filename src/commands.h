@@ -30,10 +30,10 @@ int fallbackChild(int lgt, char** lst, char* inFile, bool in, char* outFile, int
 bool checkInterpreter(int lgt, char* arg, bool detached);
 
 // pause
-int pauseShell(bool detached, int* killPID);
+int pauseShell(CMD* cmd, pid_t* killPID);
 
 // help
-int help(char* outFile, int out, bool detached, int* killPID);
+int help(CMD* cmd, pid_t* killPID);
 int promptHelp();
 int helpRedirect(char* outFile, int out);
 void getHelpPath(char* fName);

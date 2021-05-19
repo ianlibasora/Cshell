@@ -15,20 +15,20 @@
 
 // Help command
 
-int help(char* outFile, int out, bool detached, int* killPID) {
+int help(CMD* cmd, pid_t* killPID) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
 
-      if (detached) {
+      if (cmd->detached) {
          // If detached, mask SIGINT
          maskSIGINT();
       }
 
       // Ternary operator: choose between either stdout/redirection operation
-      int ret = (out == 0 ? promptHelp(): helpRedirect(outFile, out));
+      int ret = (cmd->out == 0 ? promptHelp(): helpRedirect(cmd->outFile, cmd->out));
       if (ret) {
          // If error raised
          _exit(2);
