@@ -11,8 +11,8 @@
 
 // rename command
 
-int chName(int lgt, char** lst, bool detached, int* killPID) {
-   if (detached && lgt != 4 || !detached && lgt != 3) {
+int chName(CMD* cmd, pid_t* killPID) {
+   if (cmd->detached && cmd->lgt != 4 || !cmd->detached && cmd->lgt != 3) {
       fprintf(stderr, "Error. Invalid arguments for rename\n");
       return 1;
    }
@@ -23,14 +23,14 @@ int chName(int lgt, char** lst, bool detached, int* killPID) {
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
 
-      if (detached) {
+      if (cmd->detached) {
          // If detached, mask SIGINT
          maskSIGINT();
       }
 
       // Rename arg[1] to arg[2]
-      if (rename(lst[1], lst[2]) != 0) {
-         fprintf(stderr, "Error. Unable to rename %s to %s\n", lst[1], lst[2]);
+      if (rename(cmd->args[1], cmd->args[2]) != 0) {
+         fprintf(stderr, "Error. Unable to rename %s to %s\n", cmd->args[1], cmd->args[2]);
          _exit(1);
       }
       _exit(0);

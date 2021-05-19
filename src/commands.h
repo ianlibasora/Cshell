@@ -39,6 +39,6 @@ int helpRedirect(char* outFile, int out);
 void getHelpPath(char* fName);
 
 // rename
-int chName(int lgt, char** lst, bool detached, int* killPID);
+int chName(CMD* cmd, pid_t* killPID);
 
 #endif
