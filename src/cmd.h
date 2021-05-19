@@ -7,7 +7,7 @@
 #ifndef CMD_H
 #define CMD_H
 
-#define CMDMAXARGS 5
+#define CMDMAXARGS 100
 #define CMDMAXPATH 250
 
 typedef struct CMD {
@@ -21,5 +21,6 @@ typedef struct CMD {
 } CMD;
 
 int parseCMD(char* inp, CMD* cmd);
+void cleanCMD(CMD* cmd);
 
 #endif

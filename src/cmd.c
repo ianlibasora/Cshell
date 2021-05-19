@@ -21,3 +21,14 @@ int parseCMD(char* inp, CMD* cmd) {
    
    return 0;
 }
+
+void cleanCMD(CMD* cmd) {
+   for (int i=0; i < cmd->lgt; ++i) {
+      free(cmd->args[i]);
+   }
+   cmd->lgt = 0;
+   cmd->in = false;
+   strcpy(cmd->inFile, "");
+   strcpy(cmd->outFile, "");
+   cmd->pid = 0;
+}
