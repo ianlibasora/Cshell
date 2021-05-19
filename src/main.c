@@ -97,75 +97,75 @@ int main(int argc, char* argv[]) {
          break;
       }
 
-      if (checkInvalidString(inp)) {
-         // Skip and restart loop if invalid string
-         continue;
-      }
+      // if (checkInvalidString(inp)) {
+      //    // Skip and restart loop if invalid string
+      //    continue;
+      // }
 
-      // Split string into array of args
-      if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
-         // Error handle invalid args
-         clearArgs(inpArgc, inpArgs);
-         detached = in = out = inpArgc = 0;
-         continue;
-      }
-      detached = checkDetached(inpArgc, inpArgs);// Check if running detached
+      // // Split string into array of args
+      // if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
+      //    // Error handle invalid args
+      //    clearArgs(inpArgc, inpArgs);
+      //    detached = in = out = inpArgc = 0;
+      //    continue;
+      // }
+      // detached = checkDetached(inpArgc, inpArgs);// Check if running detached
 
-      // Checks and validates redirection and finds files associated with redirection
-      if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
-         // If the redirection handling fails, reset and restart the loop
-         clearArgs(inpArgc, inpArgs);
-         cleanRedirectFiles(inFile, outFile);
-         detached = in = out = inpArgc = 0;
-         continue;
-      }
-
-
-      // Non-Always children commands
-      if (!strcmp(inpArgs[0], "quit")) {
-         break;
-      } else if (!strcmp(inpArgs[0], "cd")) {
-         cd(inpArgc, inpArgs, detached);
-         detached = false;
-      } else if (!strcmp(inpArgs[0], "clr")) {
-         system("clear");
-         detached = false;
-      }
-      // Always children commands
-      else if (!strcmp(inpArgs[0], "environ")) {
-         active = true;
-         listENV(outFile, out, detached);
-      } else if (!strcmp(inpArgs[0], "dir")) {
-         active = true;
-         dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
-      } else if (!strcmp(inpArgs[0], "echo")) {
-         active = true;
-         echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
-      } else if (!strcmp(inpArgs[0], "pause")) {
-         active = true;
-         pauseShell(detached, &killPID);
-      } else if (!strcmp(inpArgs[0], "help")) {
-         active = true;
-         help(outFile, out, detached, &killPID);
-      } else if (!strcmp(inpArgs[0], "rename")) {
-         active = true;
-         chName(inpArgc, inpArgs, detached, &killPID);
-      } else {
-         active = true;
-         fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
-      }
-
-      if (!detached) {
-         // If not detached
-         wait(NULL);
-      }
-      active = false;
+      // // Checks and validates redirection and finds files associated with redirection
+      // if (checkRedirection(inpArgc, inpArgs, &in, &out) != 0 || getRedirectionFile(inpArgc, inpArgs, inFile, outFile, detached) != 0) {
+      //    // If the redirection handling fails, reset and restart the loop
+      //    clearArgs(inpArgc, inpArgs);
+      //    cleanRedirectFiles(inFile, outFile);
+      //    detached = in = out = inpArgc = 0;
+      //    continue;
+      // }
 
 
-      // Loop restart cleanup
-      clearArgs(inpArgc, inpArgs);
-      cleanRedirectFiles(inFile, outFile);
-      detached = in = out = inpArgc = 0;
+      // // Non-Always children commands
+      // if (!strcmp(inpArgs[0], "quit")) {
+      //    break;
+      // } else if (!strcmp(inpArgs[0], "cd")) {
+      //    cd(inpArgc, inpArgs, detached);
+      //    detached = false;
+      // } else if (!strcmp(inpArgs[0], "clr")) {
+      //    system("clear");
+      //    detached = false;
+      // }
+      // // Always children commands
+      // else if (!strcmp(inpArgs[0], "environ")) {
+      //    active = true;
+      //    listENV(outFile, out, detached);
+      // } else if (!strcmp(inpArgs[0], "dir")) {
+      //    active = true;
+      //    dir(inpArgc, inpArgs, outFile, out, detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "echo")) {
+      //    active = true;
+      //    echo(inpArgc, inpArgs, outFile, out, detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "pause")) {
+      //    active = true;
+      //    pauseShell(detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "help")) {
+      //    active = true;
+      //    help(outFile, out, detached, &killPID);
+      // } else if (!strcmp(inpArgs[0], "rename")) {
+      //    active = true;
+      //    chName(inpArgc, inpArgs, detached, &killPID);
+      // } else {
+      //    active = true;
+      //    fallbackChild(inpArgc, inpArgs, inFile, in, outFile, out, detached, &killPID);
+      // }
+
+      // if (!detached) {
+      //    // If not detached
+      //    wait(NULL);
+      // }
+      // active = false;
+
+
+      // // Loop restart cleanup
+      // clearArgs(inpArgc, inpArgs);
+      // cleanRedirectFiles(inFile, outFile);
+      // detached = in = out = inpArgc = 0;
    }
 
    printf("Quitting myshell\n");
