@@ -13,7 +13,7 @@ int cd(CMD* cmd);
 void changeDir(char* path);
 
 // echo
-int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPID);
+int echo(CMD* cmd, pid_t* killPID);
 int echoRedirect(int lgt, char** lst, char* outFile, int out);
 
 // environ

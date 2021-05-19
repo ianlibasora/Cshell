@@ -12,29 +12,29 @@
 
 // echo command
 
-int echo(int lgt, char** inp, char* outFile, int out, bool detached, int* killPID) {
+int echo(CMD* cmd, pid_t* killPID) {
    pid_t pid = fork();
    if (pid == 0) {
       // Child
       setShellENV("PARENT", getenv("SHELL"));
       *killPID = getpid();
 
-      if (detached) {
+      if (cmd->detached) {
          // If detached, mask SIGINT
          maskSIGINT();
       }
 
-      if (out == 0) {
+      if (cmd->out == 0) {
          // Run no redirection
          int i = 1;
-         while (i < lgt && strcmp(inp[i], "&")) {
-            printf("%s ", inp[i]);
+         while (i < cmd->lgt && strcmp(cmd->args[i], "&")) {
+            printf("%s ", cmd->args[i]);
             ++i;
          }
          printf("\n");
       } else {
          // Run redirection
-         if (echoRedirect(lgt, inp, outFile, out)) {
+         if (echoRedirect(cmd->lgt, cmd->args, cmd->outFile, cmd->out)) {
             // If error raised
             _exit(2);
          }
