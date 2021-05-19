@@ -17,10 +17,12 @@ typedef struct CMD {
    char inFile[CMDMAXPATH];
    bool out;
    char outFile[CMDMAXPATH];
+   bool detached;
    pid_t pid;
 } CMD;
 
 int parseCMD(char* inp, CMD* cmd);
 void cleanCMD(CMD* cmd);
+void checkDetached(CMD* cmd);
 
 #endif
