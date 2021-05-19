@@ -13,8 +13,9 @@
 #include "enviroments.h"// Enviroment variable manipulation functions
 #include "redirects.h"// Shell redirection functions
 #include "sigFunctions.h"// Signal handling functions
+#include "input.h"// Input handler functions
+#include "cmd.h"// CMD struct handling
 
-#define MAXARGS 100
 #define MAXPATH 250
 
 sigjmp_buf buf;
@@ -39,10 +40,12 @@ int main(int argc, char* argv[]) {
 
    // Shell input handling
    char* inp;// Input string pointer
-   char* inpArgs[MAXARGS];// Array of strings (array of pointers)
-   int inpArgc = 0;// Length of `inpArgs`
-   char inFile[MAXPATH];// Path of stdin redirection file
-   char outFile[MAXPATH];// Path of stdout redirection file
+   CMD cmd;
+
+   // char* inpArgs[MAXARGS];// Array of strings (array of pointers)
+   // int inpArgc = 0;// Length of `inpArgs`
+   // char inFile[MAXPATH];// Path of stdin redirection file
+   // char outFile[MAXPATH];// Path of stdout redirection file
 
 
    // Shell redirection/detach handling
@@ -52,9 +55,9 @@ int main(int argc, char* argv[]) {
    // Detachment is determined by if the parent process should wait for the child process
    // cd however is still able to be run detached
 
-   bool detached = false;// Bool to state shell detachment
-   bool in = false;// Bool to state stdin redirection
-   int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
+   // bool detached = false;// Bool to state shell detachment
+   // bool in = false;// Bool to state stdin redirection
+   // int out = 0;// 0: No redirection, 1: stdout tructation, 2: stdout append
 
 
    // Shell signal handling
@@ -63,8 +66,8 @@ int main(int argc, char* argv[]) {
    // Only used for commands `Always Children`
    // Note: will not kill detached processes due to the `active` flag being false
 
-   bool active = false;// Bool to state if command execution in progress
-   int killPID;// Pid of active process
+   // bool active = false;// Bool to state if command execution in progress
+   // int killPID;// Pid of active process
 
    bool run = true;
    while (run) {
@@ -78,16 +81,16 @@ int main(int argc, char* argv[]) {
          Signal(SIGINT, handler);
       } else {
          // If SIGINT triggers, cleanup shell before new prompt
-         clearArgs(inpArgc, inpArgs);
-         cleanRedirectFiles(inFile, outFile);
-         detached = in = out = inpArgc = 0;
+         // clearArgs(inpArgc, inpArgs);
+         // cleanRedirectFiles(inFile, outFile);
+         // detached = in = out = inpArgc = 0;
 
          // Additional signal handling for (non-detached) child process SIGINT
          // Kills the unreapable process from SIGINT
-         if (active) {
-            kill(killPID, SIGTERM);
-         }
-         active = false;
+         // if (active) {
+         //    kill(killPID, SIGTERM);
+         // }
+         // active = false;
       }
       // ---------- END BLOCK ---------
 
@@ -97,10 +100,18 @@ int main(int argc, char* argv[]) {
          break;
       }
 
-      // if (checkInvalidString(inp)) {
-      //    // Skip and restart loop if invalid string
-      //    continue;
-      // }
+      if (checkInvalidString(inp)) {
+         // Skip and restart loop if invalid string
+         continue;
+      }
+
+      if (parseCMD(inp, &cmd) != 0) {
+         continue;
+      }
+
+      for (int i=0; i < cmd.lgt; ++i) {
+         printf("%s\n", cmd.args[i]);
+      }
 
       // // Split string into array of args
       // if (splitString(inp, &inpArgc, inpArgs, MAXARGS) != 0) {
