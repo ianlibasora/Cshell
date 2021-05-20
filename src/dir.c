@@ -10,6 +10,7 @@
 #include "enviroments.h"
 #include "sigFunctions.h"
 #include "cmd.h"
+#include "redirects.h"
 
 #define MAXPATH 250
 
@@ -37,12 +38,12 @@ int dir(CMD* cmd, pid_t* killPID) {
          maskSIGINT();
       }
 
-      // Ternary operator: Run either stdout or redirection
-      int ret = (cmd->out == 0 ? ls(path): lsRedirected(path, cmd->outFile, cmd->out));
-      if (ret) {
-         // If error raised
+      // Handle redirection
+      if (redirect(cmd) != 0) {
          _exit(2);
       }
+      
+      ls(path);
       _exit(0);
    } else if (pid == -1) {
       fprintf(stderr, "Error. Fork error occured\n");
@@ -71,34 +72,5 @@ int ls(char* path) {
    closedir(dPtr);
    // ---------- CLOSE BLOCK ----------
 
-   return 0;
-}
-
-int lsRedirected(char* path, char* outFile, int out) {
-   // Ternary operator: chooses between `w` or `a`
-   FILE* fPtr = fopen(outFile, (out == 1 ? "w": "a"));
-
-   if (fPtr != NULL) {
-      // ---------- REFERENCE BLOCK ---------
-      // Based on source material from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
-
-      DIR *dPtr = opendir(path);
-      struct dirent *dir;
-      if (dPtr) {
-         while ((dir = readdir(dPtr)) != NULL) {
-            fprintf(fPtr, "%s\n", dir->d_name);
-         }
-
-      } else {
-         fprintf(stderr, "Error. cound not open directory %s\n", path);
-         return 1;
-      }
-      closedir(dPtr);
-      // ---------- CLOSE BLOCK ----------
-   } else {
-      fprintf(stderr, "Error. Error occured accessing %s\n", outFile);
-      return 1;
-   }
-   fclose(fPtr);
    return 0;
 }

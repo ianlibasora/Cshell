@@ -12,6 +12,7 @@
 #include "functions.h"
 #include "sigFunctions.h"
 #include "cmd.h"
+#include "redirects.h"
 
 // Default fallback system call function when command is unknown
 
@@ -42,7 +43,7 @@ int fallback(CMD* cmd, pid_t* killPID) {
          maskSIGINT();
       }
 
-      // Rm redirection/detachment related args
+      // rm redirection/detachment related args
       // Can assume that handler has checked for invalid argument sequence
       char* newCmd[cmd->lgt];
       int j = 0;// newCmd index
@@ -61,38 +62,10 @@ int fallback(CMD* cmd, pid_t* killPID) {
       // Set last index of newCmd to NULL
       newCmd[j] = NULL;
 
-      if (cmd->in) {
-         // If stdin redirection active
-         FILE* stdinFile = fopen(cmd->inFile, "r");
-
-         if (stdinFile == NULL) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->inFile);
-            _exit(2);
-         }
-         if (dup2(fileno(stdinFile), 0) == -1) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->inFile);
-            _exit(2);
-         }
-         fclose(stdinFile);
+      // Handle redirection
+      if (redirect(cmd) != 0) {
+         _exit(1);
       }
-
-      if (cmd->out != 0) {
-         // If stdout redirection active
-         // Ternary operator choose between write/append
-         FILE* stdoutFile = fopen(cmd->outFile, (cmd->out == 1 ? "w": "a"));
-
-         if (stdoutFile == NULL) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->outFile);
-            _exit(2);
-         }
-
-         if (dup2(fileno(stdoutFile), 1) == -1) {
-            fprintf(stderr, "Error. Error occured accessing %s\n", cmd->outFile);
-            _exit(2);
-         }
-         fclose(stdoutFile);
-      }
-
       execvp(newCmd[0], newCmd);
       clearArgs(j, newCmd);
       _exit(0);

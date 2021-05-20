@@ -30,7 +30,7 @@ int cd(CMD* cmd) {
 
          if (cmd->lgt == 2) {
             // Case: `cd &`
-            printf("%s\n", getenv("PWD"));
+            changeDir(getenv("HOME"));
          } else {
             changeDir(cmd->args[1]);
          }

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "redirects.h"
 #include "cmd.h"
@@ -62,6 +63,43 @@ int getRedirectionFile(CMD* cmd) {
          strcpy(cmd->outFile, cmd->args[i + 1]);
          out = true;
       }
+   }
+   return 0;
+}
+
+int redirect(CMD* cmd) {
+   if (cmd->in) {
+      // If STDIN redirection active
+      FILE* stdinFile = fopen(cmd->inFile, "r");
+      
+      if (stdinFile == NULL) {
+         fprintf(stderr, "Error. Error occured accessing %s\n", cmd->inFile);
+         return 1;
+      }
+      
+      if (dup2(fileno(stdinFile), 0) == -1) {
+         fprintf(stderr, "Error. Error occured accessing %s\n", cmd->inFile);
+         return 1;
+      }
+      fclose(stdinFile);
+   }
+
+   if (cmd->out != 0) {
+      // If STDOUT redirection active
+      // Ternary operator: choose truncate/append
+      FILE* stdoutFile = fopen(cmd->outFile, (cmd->out == 1 ? "w": "a"));
+
+      if (stdoutFile == NULL) {
+         fprintf(stderr, "Error. Error occured accessing %s\n", cmd->outFile);
+         return 2;
+      }
+
+      if (dup2(fileno(stdoutFile), 1) == -1) {
+         fprintf(stderr, "Error. Error occured accessing %s\n", cmd->outFile);
+         return 2;
+      }
+      
+      fclose(stdoutFile);
    }
    return 0;
 }
