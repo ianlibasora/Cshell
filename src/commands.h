@@ -14,7 +14,6 @@ void changeDir(char* path);
 
 // echo
 int echo(CMD* cmd, pid_t* killPID);
-int echoRedirect(int lgt, char** lst, char* outFile, int out);
 
 // environ
 int listENV(CMD* cmd);
@@ -23,7 +22,6 @@ int listENVRedirect(char** envs, char* outFile, int out);
 // dir
 int dir(CMD* cmd, pid_t* killPID);
 int ls(char* path);
-int lsRedirected(char* path, char* outFile, int out);
 
 // fallback execution
 int fallback(CMD* cmd, pid_t* killPID);

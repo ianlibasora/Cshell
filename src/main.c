@@ -55,9 +55,7 @@ int main(int argc, char* argv[]) {
 
    // Note:
    // All commands, excluding `quit`, `cd`, `clear`, `environ` run as children of the parent process
-   // These are refered to as `Non-Always` and `Always` children commands
    // Detachment is determined by if the parent process should wait for the child process
-   // cd however is still able to be run detached
 
    bool run = true;
    while (run) {
@@ -76,7 +74,7 @@ int main(int argc, char* argv[]) {
             kill(killPID, SIGTERM);
          }
          active = false;
-         // If SIGINT triggers, cleanup shell before new prompt
+         // If SIGINT triggers, cleanup shell
          cleanCMD(&cmd, &killPID);
       }
       // ---------- END BLOCK ---------
@@ -132,6 +130,6 @@ int main(int argc, char* argv[]) {
       active = false;
       cleanCMD(&cmd, &killPID);
    }
-   printf("Quitting myshell\n");
+   printf("Exitting cshell\n");
    exit(0);
 }

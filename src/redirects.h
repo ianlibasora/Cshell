@@ -8,5 +8,6 @@
 
 int checkRedirection(CMD* cmd);
 int getRedirectionFile(CMD* cmd);
+int redirect(CMD* cmd);
 
 #endif

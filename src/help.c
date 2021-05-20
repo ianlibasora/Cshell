@@ -26,7 +26,7 @@ int help(CMD* cmd, pid_t* killPID) {
          maskSIGINT();
       }
 
-      // Ternary operator: choose between either stdout/redirection operation
+      // Ternary operator: choose STDOUT/redirection operation
       int ret = (cmd->out == 0 ? promptHelp(): helpRedirect(cmd->outFile, cmd->out));
       if (ret) {
          // If error raised
