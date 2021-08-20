@@ -43,4 +43,4 @@ For usage guide, refer to `/manual/manual.md`
 
 By Joseph Libasora
 
-Last updated: 27.Mar.2021
+Last updated: 20.Aug.2021
