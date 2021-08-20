@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
    cleanCMD(&cmd, &killPID);
 
    // Note:
-   // All commands, excluding `quit`, `cd`, `clear`, `environ` run as children of the parent process
+   // All commands, excluding `exit`, `cd`, `clear`, `environ` run as children of the parent process
    // Detachment is determined by if the parent process should wait for the child process
 
    bool run = true;
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
       }
 
       // Non-Always children commands
-      if (!strcmp(cmd.args[0], "quit")) {
+      if (!strcmp(cmd.args[0], "exit")) {
          break;
       } else if (!strcmp(cmd.args[0], "cd")) {
          cd(&cmd);
