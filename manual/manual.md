@@ -78,8 +78,8 @@ Key:
 <arguments>: Mandatory arguments
 ```
 
-- ### `quit`
-   Quits and closes cshell.
+- ### `exit`
+   Exits and closes cshell.
 
    Extra operations supported: None
 
